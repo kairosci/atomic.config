@@ -33,6 +33,7 @@ remove_base_packages() {
         "filelight"
         "firefox"
         "firefox-langpacks"
+        "toolbox"
     )
 
     rpm-ostree override remove "${packages_to_remove[@]}"
@@ -43,6 +44,7 @@ remove_base_packages() {
 install_third_party_repos() {
     echo "Installing third-party repositories..."
     curl -fsS https://dl.brave.com/install.sh | sh
+    curl -o /etc/yum.repos.d/fedora-spotify.repo https://negativo17.org/repos/fedora-spotify.repo
     echo "Third-party repositories installed."
 }
 
@@ -64,6 +66,8 @@ install_packages() {
         "qemu-kvm"
         "kde-l10n-ko"
         "glibc-langpack-ko"
+        "distrobox"
+        "spotify-client"
     )
 
     rpm-ostree install "${packages_to_install[@]}"
