@@ -14,7 +14,7 @@ remove_defaults() {
         "org.kde.skanpage"
     )
 
-    flatpak uninstall --delete-data "${apps_to_remove[@]}"
+    flatpak uninstall --delete-data -y "${apps_to_remove[@]}"
     echo "Default Flatpak applications removed."
 }
 

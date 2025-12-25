@@ -36,8 +36,22 @@ remove_base_packages() {
         "toolbox"
     )
 
-    rpm-ostree override remove "${packages_to_remove[@]}"
-    echo "Base packages removed."
+    local valid_packages_to_remove=()
+
+    for pkg in "${packages_to_remove[@]}"; do
+        if rpm -q "$pkg" &> /dev/null; then
+            valid_packages_to_remove+=("$pkg")
+        else
+            echo "Skipping removal of $pkg (not installed or already removed)."
+        fi
+    done
+
+    if [ ${#valid_packages_to_remove[@]} -gt 0 ]; then
+        rpm-ostree override remove "${valid_packages_to_remove[@]}"
+        echo "Base packages removed."
+    else
+        echo "No base packages satisfy removal criteria."
+    fi
 }
 
 # Function to install third-party repositories
