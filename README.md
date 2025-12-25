@@ -68,7 +68,7 @@ Located in the `config/` directory, this is the main orchestrator script.
 *   **Requirement**: Must be run with `sudo` (`sudo ./index.sh`).
 *   **Execution**: Navigates to the `script/` directory and executes the following in order:
     1.  `hide_grub.sh`
-    2.  `manage_system.sh`
-    3.  `rename_btrfs.sh`
-    4.  `set_flatpak.sh`
-    5.  `set_rpm.sh`
+    2.  `rename_btrfs.sh`
+    3.  `set_flatpak.sh`
+    4.  `set_rpm.sh`
+    5.  `manage_system.sh`

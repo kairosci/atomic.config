@@ -24,10 +24,10 @@ run_scripts() {
     # Execute scripts
     local scripts=(
         "./hide_grub.sh"
-        "./manage_system.sh"
         "./rename_btrfs.sh"
         "./set_flatpak.sh"
         "./set_rpm.sh"
+        "./manage_system.sh"
     )
 
     for script in "${scripts[@]}"; do
