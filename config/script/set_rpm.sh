@@ -37,10 +37,16 @@ remove_base_packages() {
     )
 
     local valid_packages_to_remove=()
+    local ostree_status=$(rpm-ostree status)
 
     for pkg in "${packages_to_remove[@]}"; do
         if rpm -q "$pkg" &> /dev/null; then
-            valid_packages_to_remove+=("$pkg")
+            # Check if package is already mentioned in rpm-ostree status (implies override exists)
+            if echo "$ostree_status" | grep -Fq "$pkg"; then
+                echo "Skipping removal of $pkg (already has an override/pending)."
+            else
+                valid_packages_to_remove+=("$pkg")
+            fi
         else
             echo "Skipping removal of $pkg (not installed or already removed)."
         fi
@@ -84,14 +90,14 @@ install_packages() {
         "spotify-client"
     )
 
-    rpm-ostree install "${packages_to_install[@]}"
+    rpm-ostree install --idempotent "${packages_to_install[@]}"
     echo "New packages installed."
 }
 
 # Function to install Google Antigravity
 install_google_antigravity() {
     echo "Installing Google Antigravity..."
-    rpm-ostree install google-antigravity
+    rpm-ostree install --idempotent google-antigravity
     echo "Google Antigravity installed."
 }
 

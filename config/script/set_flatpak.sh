@@ -14,8 +14,25 @@ remove_defaults() {
         "org.kde.skanpage"
     )
 
-    flatpak uninstall --delete-data -y "${apps_to_remove[@]}"
-    echo "Default Flatpak applications removed."
+    local valid_apps_to_remove=()
+
+    # Get list of installed flatpaks to avoid errors
+    local installed_flatpaks=$(flatpak list --app --columns=application)
+
+    for app in "${apps_to_remove[@]}"; do
+        if echo "$installed_flatpaks" | grep -q "$app"; then
+            valid_apps_to_remove+=("$app")
+        else
+            echo "Skipping removal of $app (not installed)."
+        fi
+    done
+
+    if [ ${#valid_apps_to_remove[@]} -gt 0 ]; then
+        flatpak uninstall --delete-data -y "${valid_apps_to_remove[@]}"
+        echo "Default Flatpak applications removed."
+    else
+        echo "No default Flatpak applications found to remove."
+    fi
 }
 
 # Function to setup Flatpak remotes
