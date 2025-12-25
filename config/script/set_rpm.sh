@@ -70,11 +70,19 @@ install_packages() {
     echo "New packages installed."
 }
 
+# Function to install Google Antigravity
+install_google_antigravity() {
+    echo "Installing Google Antigravity..."
+    rpm-ostree install google-antigravity
+    echo "Google Antigravity installed."
+}
+
 # Main execution
 main() {
     remove_base_packages
     install_third_party_repos
     install_packages
+    install_google_antigravity
 }
 
 main
