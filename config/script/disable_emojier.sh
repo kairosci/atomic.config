@@ -11,11 +11,11 @@ disable_plasma_emojier() {
     
     # Create override desktop file to hide emojier
     cat > "$local_apps_dir/org.kde.plasma.emojier.desktop" <<EOF
-[Desktop Entry]
-Type=Application
-Name=Emoji Selector
-Hidden=true
-NoDisplay=true
+    [Desktop Entry]
+    Type=Application
+    Name=Emoji Selector
+    Hidden=true
+    NoDisplay=true
 EOF
     
     # Disable global keyboard shortcut for emojier
@@ -24,9 +24,9 @@ EOF
     
     # Create override to disable the global shortcut
     cat > "$kglobalaccel_dir/org.kde.plasma.emojier.desktop" <<EOF
-[Global Shortcuts]
-_k_friendly_name=Emoji Selector
-show=none
+    [Global Shortcuts]
+    _k_friendly_name=Emoji Selector
+    show=none
 EOF
     
     echo "plasma-emojier disabled successfully."
