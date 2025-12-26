@@ -97,7 +97,7 @@ install_packages() {
 # Function to install Google Antigravity
 install_google_antigravity() {
     echo "Installing Google Antigravity..."
-    rpm-ostree install --idempotent google-antigravity
+    rpm-ostree install --idempotent antigravity
     echo "Google Antigravity installed."
 }
 
