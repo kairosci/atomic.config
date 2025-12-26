@@ -26,6 +26,7 @@ run_scripts() {
         "./hide_grub.sh"
         "./rename_btrfs.sh"
         "./set_flatpak.sh"
+        "./disable_emojier.sh"
         "./set_rpm.sh"
         "./manage_system.sh"
     )

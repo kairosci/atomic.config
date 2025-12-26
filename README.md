@@ -39,6 +39,13 @@ This script manages Flatpak applications and remotes. It performs the following:
 2.  **Remote Setup**: Adds the Flathub repository (`flathub.org`) if it is not already present.
 3.  **Application Installation**: Installs specific Flatpak applications from Flathub, such as Discord and Kalk.
 
+### disable_emojier.sh
+
+This script disables the KDE Plasma emoji selector (`plasma-emojier`) which is integrated into the `plasma-desktop` package and cannot be removed directly.
+*   **Action**: Hides the application from launchers by creating a local override desktop file with `Hidden=true`.
+*   **Shortcut Disabling**: Disables the global keyboard shortcut for the emoji selector.
+*   **Note**: The binary remains at `/usr/bin/plasma-emojier` but is not accessible via launcher or keyboard shortcuts.
+
 ### hide_grub.sh
 
 This script reduces the boot time by hiding the GRUB menu.
@@ -70,5 +77,6 @@ Located in the `config/` directory, this is the main orchestrator script.
     1.  `hide_grub.sh`
     2.  `rename_btrfs.sh`
     3.  `set_flatpak.sh`
-    4.  `set_rpm.sh`
-    5.  `manage_system.sh`
+    4.  `disable_emojier.sh`
+    5.  `set_rpm.sh`
+    6.  `manage_system.sh`

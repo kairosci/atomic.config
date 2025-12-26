@@ -21,6 +21,7 @@ remove_user_configs() {
         "$HOME/.config/kdebugrc"
         "$HOME/.config/khelpcenterrc"
         "$HOME/.config/kcharselectrc"
+        "$HOME/.config/plasmaemojierrc"
         "$HOME/.config/drkonqirc"
         "$HOME/.mozilla"
         "$HOME/.config/ibus/typing-booster"
