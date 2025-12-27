@@ -29,6 +29,7 @@ run_scripts() {
         "./disable_emojier.sh"
         "./set_rpm.sh"
         "./manage_system.sh"
+        "./set_folder_protection.sh"
     )
 
     for script in "${scripts[@]}"; do
