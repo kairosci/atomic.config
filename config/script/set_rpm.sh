@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 set -e
 
-# Function to remove base packages
+
 remove_base_packages() {
     echo "Removing base packages..."
     local packages_to_remove=(
@@ -60,7 +60,7 @@ remove_base_packages() {
     fi
 }
 
-# Function to install third-party repositories
+
 install_third_party_repos() {
     echo "Installing third-party repositories..."
     
@@ -81,7 +81,7 @@ install_third_party_repos() {
     echo "Third-party repositories check completed."
 }
 
-# Function to install new packages
+
 install_packages() {
     echo "Installing new packages..."
     local packages_to_install=(
@@ -97,11 +97,9 @@ install_packages() {
         "ncurses-devel"
         "nodejs"
         "qemu-kvm"
-
         "distrobox"
         "spotify-client"
         "rsms-inter-fonts"
-        "google-noto-sans-mono-fonts"
         "breeze-gtk"
         "adw-gtk3-theme"
     )
@@ -110,14 +108,14 @@ install_packages() {
     echo "New packages installed."
 }
 
-# Function to install Google Antigravity
+
 install_google_antigravity() {
     echo "Installing Google Antigravity..."
     rpm-ostree install --idempotent antigravity
     echo "Google Antigravity installed."
 }
 
-# Main execution
+
 main() {
     remove_base_packages
     install_third_party_repos
