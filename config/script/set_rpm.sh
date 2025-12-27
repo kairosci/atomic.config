@@ -63,9 +63,22 @@ remove_base_packages() {
 # Function to install third-party repositories
 install_third_party_repos() {
     echo "Installing third-party repositories..."
-    curl -fsS https://dl.brave.com/install.sh | sh
-    curl -o /etc/yum.repos.d/fedora-spotify.repo https://negativo17.org/repos/fedora-spotify.repo
-    echo "Third-party repositories installed."
+    
+    if [ ! -f /etc/yum.repos.d/brave-browser.repo ]; then
+        echo "Adding Brave Browser repository..."
+        curl -fsS https://dl.brave.com/install.sh | sh
+    else
+        echo "Brave Browser repository already exists. Skipping."
+    fi
+
+    if [ ! -f /etc/yum.repos.d/fedora-spotify.repo ]; then
+        echo "Adding Spotify repository..."
+        curl -o /etc/yum.repos.d/fedora-spotify.repo https://negativo17.org/repos/fedora-spotify.repo
+    else
+        echo "Spotify repository already exists. Skipping."
+    fi
+
+    echo "Third-party repositories check completed."
 }
 
 # Function to install new packages
@@ -84,10 +97,13 @@ install_packages() {
         "ncurses-devel"
         "nodejs"
         "qemu-kvm"
-        "kde-l10n-ko"
-        "glibc-langpack-ko"
+
         "distrobox"
         "spotify-client"
+        "rsms-inter-fonts"
+        "google-noto-sans-mono-fonts"
+        "breeze-gtk"
+        "adw-gtk3-theme"
     )
 
     rpm-ostree install --idempotent "${packages_to_install[@]}"
