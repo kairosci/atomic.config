@@ -3,10 +3,10 @@ set -e
 
 # Function to rename BTRFS labels
 rename_btrfs_labels() {
-    echo "Renaming BTRFS labels..."
+    echo "Renaming BTRFS labels"
     btrfs filesystem label /var fedora
     btrfs filesystem label /var/home fedora
-    echo "BTRFS labels renamed."
+    echo "Done"
 }
 
 # Main execution

@@ -1,5 +1,5 @@
 delete_folders() {
-    read -p "Folder's name': " folder_name
+    read -p "Folder: " folder_name
     [ -z "$folder_name" ] && {
       return 1;
     }

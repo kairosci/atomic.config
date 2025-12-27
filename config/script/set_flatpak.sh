@@ -3,7 +3,7 @@ set -e
 
 # Function to remove default Flatpak apps
 remove_defaults() {
-    echo "Removing default Flatpak applications..."
+    echo "Removing defaults"
     local apps_to_remove=(
         "org.fedoraproject.Platform.GL.default"
         "org.kde.kcalc"
@@ -29,29 +29,29 @@ remove_defaults() {
 
     if [ ${#valid_apps_to_remove[@]} -gt 0 ]; then
         flatpak uninstall --delete-data -y "${valid_apps_to_remove[@]}"
-        echo "Default Flatpak applications removed."
+        echo "Defaults removed"
     else
-        echo "No default Flatpak applications found to remove."
+        echo "No defaults found"
     fi
 }
 
 # Function to setup Flatpak remotes
 setup_remotes() {
-    echo "Setting up Flatpak remotes..."
+    echo "Setting up remotes"
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    echo "Flatpak remotes setup completed."
+    echo "Remotes setup done"
 }
 
 # Function to install Flatpak apps
 install_apps() {
-    echo "Installing Flatpak applications..."
+    echo "Installing apps"
     local apps_to_install=(
         "com.discordapp.Discord"
         "org.kde.kalk"
     )
 
     flatpak install flathub "${apps_to_install[@]}"
-    echo "Flatpak applications installed."
+    echo "Apps installed"
 }
 
 # Main execution

@@ -3,15 +3,15 @@ set -e
 
 # Function to clean system logs and ostree
 system_cleanup() {
-    echo "Starting system cleanup..."
+    echo "System cleanup"
     journalctl --vacuum-files=0
     rpm-ostree cleanup --base -m
-    echo "System cleanup completed."
+    echo "Done"
 }
 
 # Function to remove user configuration directories
 remove_user_configs() {
-    echo "Removing user configurations..."
+    echo "Removing user configs"
     
     local config_dirs=(
         "$HOME/.config/kdeconnect"
@@ -73,24 +73,24 @@ remove_user_configs() {
         rm -rf "$dir"
     done
     
-    echo "User configurations removed."
+    echo "Done"
 }
 
 # Function to upgrade the system
 system_upgrade() {
-    echo "Upgrading system with rpm-ostree..."
+    echo "Upgrading system"
     rpm-ostree reload
     rpm-ostree refresh-md
     rpm-ostree upgrade
-    echo "System upgrade completed."
+    echo "Done"
 }
 
 # Function to manage Flatpak packages
 flatpak_maintenance() {
-    echo "Performing Flatpak maintenance..."
+    echo "Flatpak maintenance"
     flatpak uninstall --unused --delete-data -y
     flatpak update -y
-    echo "Flatpak maintenance completed."
+    echo "Done"
 }
 
 # Main execution

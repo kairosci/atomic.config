@@ -11,13 +11,13 @@ check_sudo() {
 
 # Function to execute configuration scripts
 run_scripts() {
-    echo "Starting configuration..."
+    echo "Starting configuration"
     
     # Navigate to script directory
     if [ -d "script" ]; then
         cd script/
     else
-        echo "Error: 'script' directory not found."
+        echo "Error: 'script' directory not found"
         exit 1
     fi
 
@@ -33,14 +33,14 @@ run_scripts() {
 
     for script in "${scripts[@]}"; do
         if [ -f "$script" ]; then
-            echo "Executing $script..."
+            echo "Executing $script"
             $script
         else
-            echo "Warning: Script $script not found."
+            echo "Warning: Script $script not found"
         fi
     done
     
-    echo "Configuration completed."
+    echo "Configuration completed"
 }
 
 # Main execution

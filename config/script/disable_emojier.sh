@@ -3,7 +3,7 @@ set -e
 
 # Function to disable plasma-emojier
 disable_plasma_emojier() {
-    echo "Disabling plasma-emojier..."
+    echo "Disabling plasma-emojier"
     
     # Hide the application from launchers by copying to local and setting Hidden=true
     local local_apps_dir="$HOME/.local/share/applications"
@@ -29,8 +29,8 @@ EOF
     show=none
 EOF
     
-    echo "plasma-emojier disabled successfully."
-    echo "Note: The emojier binary still exists in /usr/bin/plasma-emojier but won't be accessible via launcher or shortcuts."
+    echo "Done"
+
 }
 
 # Main execution

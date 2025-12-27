@@ -3,7 +3,7 @@ set -e
 
 
 remove_base_packages() {
-    echo "Removing base packages..."
+    echo "Removing base packages"
     local packages_to_remove=(
         "cldr-emoji-annotation-dtd"
         "cldr-emoji-annotation"
@@ -54,36 +54,36 @@ remove_base_packages() {
 
     if [ ${#valid_packages_to_remove[@]} -gt 0 ]; then
         rpm-ostree override remove "${valid_packages_to_remove[@]}"
-        echo "Base packages removed."
+        echo "Base packages removed"
     else
-        echo "No base packages satisfy removal criteria."
+        echo "No base packages found"
     fi
 }
 
 
 install_third_party_repos() {
-    echo "Installing third-party repositories..."
+    echo "Installing repos"
     
     if [ ! -f /etc/yum.repos.d/brave-browser.repo ]; then
-        echo "Adding Brave Browser repository..."
+        echo "Adding Brave"
         curl -fsS https://dl.brave.com/install.sh | sh
     else
-        echo "Brave Browser repository already exists. Skipping."
+        echo "Brave exists"
     fi
 
     if [ ! -f /etc/yum.repos.d/fedora-spotify.repo ]; then
-        echo "Adding Spotify repository..."
+        echo "Adding Spotify"
         curl -o /etc/yum.repos.d/fedora-spotify.repo https://negativo17.org/repos/fedora-spotify.repo
     else
-        echo "Spotify repository already exists. Skipping."
+        echo "Spotify exists"
     fi
 
-    echo "Third-party repositories check completed."
+    echo "Repo check done"
 }
 
 
 install_packages() {
-    echo "Installing new packages..."
+    echo "Installing packages"
     local packages_to_install=(
         "clang"
         "cmake"
@@ -105,14 +105,14 @@ install_packages() {
     )
 
     rpm-ostree install --idempotent "${packages_to_install[@]}"
-    echo "New packages installed."
+    echo "Packages installed"
 }
 
 
 install_google_antigravity() {
-    echo "Installing Google Antigravity..."
+    echo "Installing Antigravity"
     rpm-ostree install --idempotent antigravity
-    echo "Google Antigravity installed."
+    echo "Antigravity installed"
 }
 
 
