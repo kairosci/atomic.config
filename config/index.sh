@@ -13,11 +13,12 @@ check_sudo() {
 run_scripts() {
     echo "Starting configuration"
     
-    # Navigate to script directory
-    if [ -d "script" ]; then
-        cd script/
+    # Navigate to script directory relative to this script
+    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if [ -d "$SCRIPT_DIR/script" ]; then
+        cd "$SCRIPT_DIR/script/"
     else
-        echo "Error: 'script' directory not found"
+        echo "Error: 'script' directory not found at $SCRIPT_DIR/script"
         exit 1
     fi
 
