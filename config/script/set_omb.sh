@@ -31,26 +31,23 @@ setup_omb() {
 
     # 2. Configure Theme (vscode)
     if [ -f "$BASHRC" ]; then
-        echo "Setting theme to 'vscode' in .bashrc..."
-        # Replace existing theme line
-        sed -i 's/^OSH_THEME=".*"/OSH_THEME="vscode"/' "$BASHRC"
-        
-        # If the line wasn't there (failed substitution), we might need to verify, 
-        # but usually OMB install adds 'OSH_THEME="font"'.
-        # Let's double check with grep just in case substitution didn't happen (if line missing)
-        if ! grep -q 'OSH_THEME="vscode"' "$BASHRC"; then
-             # If grep fails, it means it's not set to vscode. Could be completely missing or substitution failed.
-             # If completely missing, append it (unlikely after install)
-             if ! grep -q 'OSH_THEME=' "$BASHRC"; then
+        if grep -q 'OSH_THEME="vscode"' "$BASHRC"; then
+             echo "Theme is already set to 'vscode'. Skipping configuration."
+        else
+            echo "Setting theme to 'vscode' in .bashrc..."
+            # Replace existing theme line
+            sed -i 's/^OSH_THEME=".*"/OSH_THEME="vscode"/' "$BASHRC"
+            
+            # If the line wasn't there (failed substitution), append it
+            if ! grep -q 'OSH_THEME=' "$BASHRC"; then
                  echo 'OSH_THEME="vscode"' >> "$BASHRC"
-             fi
+            fi
+            
+            # Ensure permissions
+            chown "$REAL_USER:$REAL_USER" "$BASHRC"
+            echo "Theme updated. Please restart your terminal."
         fi
-        
-        # Ensure permissions are correct (sed -i might preserve, but good to be safe)
-        chown "$REAL_USER:$REAL_USER" "$BASHRC"
     fi
-    
-    echo "Done. Please restart your terminal to see the new theme."
 }
 
 main() {
