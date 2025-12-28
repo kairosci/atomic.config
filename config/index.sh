@@ -32,6 +32,7 @@ run_scripts() {
         "./manage_system.sh"
         "./set_folder_protection.sh"
         "./set_safe_delete.sh"
+        "./set_omb.sh"
     )
 
     for script in "${scripts[@]}"; do
