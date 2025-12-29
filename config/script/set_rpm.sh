@@ -5,10 +5,6 @@ set -e
 remove_base_packages() {
     echo "Removing base packages"
     local packages_to_remove=(
-        "cldr-emoji-annotation-dtd"
-        "cldr-emoji-annotation"
-        "default-fonts-core-emoji"
-        "google-noto-color-emoji-fonts"
         "ibus-typing-booster"
         "kde-connect"
         "kde-connect-libs"
