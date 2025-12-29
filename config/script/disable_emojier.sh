@@ -1,39 +1,44 @@
 #!/usr/bin/bash
 set -e
 
-# Function to disable plasma-emojier
+# Disable plasma-emojier via local override
+
 disable_plasma_emojier() {
     echo "Disabling plasma-emojier"
     
-    # Hide the application from launchers by copying to local and setting Hidden=true
-    local local_apps_dir="$HOME/.local/share/applications"
+    # Get actual user home (not root when running with sudo)
+    local user_home
+    if [ -n "$SUDO_USER" ]; then
+        user_home=$(getent passwd "$SUDO_USER" | cut -d: -f6)
+    else
+        user_home="$HOME"
+    fi
+    
+    local local_apps_dir="$user_home/.local/share/applications"
+    local emojier_desktop="$local_apps_dir/org.kde.plasma.emojier.desktop"
+    
     mkdir -p "$local_apps_dir"
     
-    # Create override desktop file to hide emojier
-    cat > "$local_apps_dir/org.kde.plasma.emojier.desktop" <<EOF
-    [Desktop Entry]
-    Type=Application
-    Name=Emoji Selector
-    Hidden=true
-    NoDisplay=true
+    if [ ! -f "$emojier_desktop" ]; then
+        cat > "$emojier_desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Emoji Selector
+Hidden=true
+NoDisplay=true
 EOF
-    
-    # Disable global keyboard shortcut for emojier
-    local kglobalaccel_dir="$HOME/.local/share/kglobalaccel"
-    mkdir -p "$kglobalaccel_dir"
-    
-    # Create override to disable the global shortcut
-    cat > "$kglobalaccel_dir/org.kde.plasma.emojier.desktop" <<EOF
-    [Global Shortcuts]
-    _k_friendly_name=Emoji Selector
-    show=none
-EOF
+        # Fix ownership if running as sudo
+        if [ -n "$SUDO_USER" ]; then
+            chown "$SUDO_USER:$SUDO_USER" "$emojier_desktop"
+        fi
+        echo "Emojier hidden"
+    else
+        echo "Emojier already hidden"
+    fi
     
     echo "Done"
-
 }
 
-# Main execution
 main() {
     disable_plasma_emojier
 }
