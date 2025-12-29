@@ -28,6 +28,7 @@ run_scripts() {
         "./rename_btrfs.sh"
         "./set_flatpak.sh"
         "./disable_emojier.sh"
+        "./hide_urw_fonts.sh"
         "./set_rpm.sh"
         "./manage_system.sh"
         "./set_folder_protection.sh"
