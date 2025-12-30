@@ -36,7 +36,7 @@ setup_alias() {
         {
             echo ""
             echo "# Safe Delete Configuration (Kionite Setup)"
-            echo "alias rm='gio trash'"
+            echo "alias rm='gio trash 2>/dev/null || /usr/bin/rm'"
             echo "alias rmp='/usr/bin/rm'"
         } >> "$BASHRC"
         

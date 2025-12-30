@@ -24,7 +24,7 @@ setup_omb() {
         echo "Installing Oh My Bash..."
         # Install unattended
         # We fetch the script and run it as the user
-        sudo -u "$REAL_USER" bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" --unattended
+        curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh | sudo -u "$REAL_USER" bash -s -- --unattended
     else
         echo "Oh My Bash is already installed."
     fi

@@ -34,6 +34,7 @@ run_scripts() {
         "./set_folder_protection.sh"
         "./set_safe_delete.sh"
         "./set_omb.sh"
+        "./set_konsole.sh"
     )
 
     for script in "${scripts[@]}"; do
