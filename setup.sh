@@ -27,6 +27,7 @@ main() {
         show_menu
         read -p "> " choice
         
+        clear
         case $choice in
             1)
                 ./config/index.sh

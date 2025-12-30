@@ -30,7 +30,7 @@ setup_alias() {
     fi
 
     # Append aliases if not already present
-    if ! grep -q "alias rm='gio trash'" "$BASHRC"; then
+    if ! grep -q "Safe Delete Configuration (Kionite Setup)" "$BASHRC"; then
         echo "Adding safe delete aliases to $BASHRC..."
         
         {
