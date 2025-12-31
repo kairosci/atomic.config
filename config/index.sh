@@ -31,6 +31,7 @@ run_scripts() {
         "./hide_urw_fonts.sh"
         "./set_rpm.sh"
         "./set_spotify_pwa.sh"
+        "./set_protonmail_pwa.sh"
         "./manage_system.sh"
         "./set_folder_protection.sh"
         "./set_safe_delete.sh"
