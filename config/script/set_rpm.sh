@@ -67,12 +67,7 @@ install_third_party_repos() {
         echo "Brave exists"
     fi
 
-    if [ ! -f /etc/yum.repos.d/fedora-spotify.repo ]; then
-        echo "Adding Spotify"
-        curl -o /etc/yum.repos.d/fedora-spotify.repo https://negativo17.org/repos/fedora-spotify.repo
-    else
-        echo "Spotify exists"
-    fi
+
 
     echo "Repo check done"
 }
@@ -94,7 +89,6 @@ install_packages() {
         "nodejs"
         "qemu-kvm"
         "distrobox"
-        "spotify-client"
         "rsms-inter-fonts"
         "breeze-gtk"
         "adw-gtk3-theme"

@@ -21,7 +21,7 @@ show_menu() {
 
 main() {
     check_sudo
-    chmod +x config/index.sh utils/update_system.sh utils/delete_folder.sh
+    chmod +x config/index.sh config/script/*.sh utils/update_system.sh utils/delete_folder.sh
 
     while true; do
         show_menu
