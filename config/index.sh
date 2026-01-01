@@ -1,60 +1,70 @@
 #!/usr/bin/bash
-set -e
+# =============================================================================
+# Kionite Configuration Index
+# Main entry point for system configuration
+# =============================================================================
 
-# Function to check if running as root
-check_sudo() {
-    if [ "$EUID" -ne 0 ]; then
-        echo "Run this script with sudo"
-        exit 1
-    fi
-}
+set -euo pipefail
 
-# Function to execute configuration scripts
-run_scripts() {
-    echo "Starting configuration"
+# Get script directory
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source common library
+source "$SCRIPT_DIR/../lib/common.sh"
+
+# =============================================================================
+# Main Functions
+# =============================================================================
+
+run-scripts() {
+    log-info "Starting Kionite configuration"
     
-    # Navigate to script directory relative to this script
-    local SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    if [ -d "$SCRIPT_DIR/script" ]; then
-        cd "$SCRIPT_DIR/script/"
-    else
-        echo "Error: 'script' directory not found at $SCRIPT_DIR/script"
+    local scripts_dir="$SCRIPT_DIR/script"
+    
+    if [[ ! -d "$scripts_dir" ]]; then
+        log-error "Script directory not found: $scripts_dir"
         exit 1
     fi
-
-    # Execute scripts
-    local scripts=(
-        "./hide_grub.sh"
-        "./rename_btrfs.sh"
-        "./set_flatpak.sh"
-        "./disable_emojier.sh"
-        "./hide_urw_fonts.sh"
-        "./set_rpm.sh"
-        "./set_spotify_pwa.sh"
-        "./set_protonmail_pwa.sh"
-        "./manage_system.sh"
-        "./set_folder_protection.sh"
-        "./set_safe_delete.sh"
-        "./set_omb.sh"
-        "./set_konsole.sh"
+    
+    cd "$scripts_dir"
+    
+    # Configuration scripts in execution order
+    local -a scripts=(
+        "./hide-grub.sh"
+        "./rename-btrfs.sh"
+        "./set-flatpak.sh"
+        "./disable-emojier.sh"
+        "./hide-urw-fonts.sh"
+        "./set-rpm.sh"
+        "./set-spotify-pwa.sh"
+        "./set-protonmail-pwa.sh"
+        "./set-launcher-icon.sh"
+        "./manage-system.sh"
+        "./set-folder-protection.sh"
+        "./set-safe-delete.sh"
+        "./set-omb.sh"
+        "./set-konsole.sh"
     )
-
+    
     for script in "${scripts[@]}"; do
-        if [ -f "$script" ]; then
-            echo "Executing $script"
-            $script
+        if [[ -f "$script" ]]; then
+            log-info "Executing: $script"
+            "$script"
         else
-            echo "Warning: Script $script not found"
+            log-warn "Script not found: $script"
         fi
     done
     
-    echo "Configuration completed"
+    log-success "Configuration completed"
 }
 
-# Main execution
+# =============================================================================
+# Entry Point
+# =============================================================================
+
 main() {
-    check_sudo
-    run_scripts
+    require-root
+    run-scripts
 }
 
-main
+main "$@"

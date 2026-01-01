@@ -1,52 +1,74 @@
 #!/usr/bin/bash
-set -e
+# =============================================================================
+# Kionite Setup Manager
+# Interactive menu for system management
+# =============================================================================
 
-# Function to check if running as root
-check_sudo() {
-    if [ "$EUID" -ne 0 ]; then
-        echo "Please run this script with sudo"
-        exit 1
-    fi
-}
+set -euo pipefail
 
-# Menu Display
-show_menu() {
+# Get script directory
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source common library
+source "$SCRIPT_DIR/lib/common.sh"
+
+# =============================================================================
+# Menu Functions
+# =============================================================================
+
+show-menu() {
     clear
-    echo "Kionite Manager"
-    echo "1. Optimize"
-    echo "2. Update"
-    echo "3. Delete Folder"
-    echo "4. Exit"
+    echo "================================"
+    echo "       Kionite Manager"
+    echo "================================"
+    echo ""
+    echo "  1. Optimize System"
+    echo "  2. Update System"
+    echo "  3. Delete Folder"
+    echo "  4. Exit"
+    echo ""
 }
+
+# =============================================================================
+# Entry Point
+# =============================================================================
 
 main() {
-    check_sudo
-    chmod +x config/index.sh config/script/*.sh utils/update_system.sh utils/delete_folder.sh
-
+    require-root
+    
+    # Set executable permissions
+    chmod +x "$SCRIPT_DIR/config/index.sh" \
+             "$SCRIPT_DIR/config/script/"*.sh \
+             "$SCRIPT_DIR/utils/"*.sh \
+             "$SCRIPT_DIR/lib/"*.sh 2>/dev/null || true
+    
     while true; do
-        show_menu
-        read -p "> " choice
+        show-menu
+        read -rp "> " choice
         
         clear
-        case $choice in
+        case "$choice" in
             1)
-                ./config/index.sh
+                "$SCRIPT_DIR/config/index.sh"
                 ;;
             2)
-                ./utils/update_system.sh
+                "$SCRIPT_DIR/utils/update-system.sh"
                 ;;
             3)
-                ./utils/delete_folder.sh
+                "$SCRIPT_DIR/utils/delete-folder.sh"
                 ;;
             4)
+                log-info "Goodbye!"
                 exit 0
                 ;;
             *)
+                log-warn "Invalid option: $choice"
                 ;;
         esac
         
-        read -p "..."
+        echo ""
+        read -rp "Press Enter to continue..."
     done
 }
 
-main
+main "$@"
