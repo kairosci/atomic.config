@@ -40,7 +40,6 @@ run-scripts() {
         "./set-protonmail-pwa.sh"
         "./set-launcher-icon.sh"
         "./manage-system.sh"
-        "./set-folder-protection.sh"
         "./set-safe-delete.sh"
         "./set-omb.sh"
         "./set-konsole.sh"

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
-# Kionite Setup Manager
-# Interactive menu for system management
+# Kionite Setup
+# Installs Kionite Manager and configures global access
 # =============================================================================
 
 set -euo pipefail
@@ -13,20 +13,40 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib/common.sh"
 
 # =============================================================================
-# Menu Functions
+# Main Functions
 # =============================================================================
 
-show-menu() {
-    clear
-    echo "================================"
-    echo "       Kionite Manager"
-    echo "================================"
-    echo ""
-    echo "  1. Optimize System"
-    echo "  2. Update System"
-    echo "  3. Delete Folder"
-    echo "  4. Exit"
-    echo ""
+set-permissions() {
+    log-info "Setting executable permissions..."
+    chmod +x "$SCRIPT_DIR/index.sh" \
+             "$SCRIPT_DIR/config/index.sh" \
+             "$SCRIPT_DIR/config/script/"*.sh \
+             "$SCRIPT_DIR/utils/"*.sh \
+             "$SCRIPT_DIR/lib/"*.sh 2>/dev/null || true
+}
+
+configure-bashrc() {
+    log-info "Configuring .bashrc..."
+    
+    local user_home
+    user_home="$(get-user-home)"
+    local bashrc="$user_home/.bashrc"
+    local alias_cmd="alias kionite=\"$SCRIPT_DIR/index.sh\""
+    
+    if [[ ! -f "$bashrc" ]]; then
+        log-warn ".bashrc not found at $bashrc"
+        return
+    fi
+    
+    if grep -q "alias kionite=" "$bashrc"; then
+        log-info "Alias already exists in .bashrc"
+    else
+        echo "" >> "$bashrc"
+        echo "# Kionite Manager" >> "$bashrc"
+        echo "$alias_cmd" >> "$bashrc"
+        log-success "Added 'kionite' alias to .bashrc"
+        log-info "Please restart your terminal or run: source ~/.bashrc"
+    fi
 }
 
 # =============================================================================
@@ -36,39 +56,13 @@ show-menu() {
 main() {
     require-root
     
-    # Set executable permissions
-    chmod +x "$SCRIPT_DIR/config/index.sh" \
-             "$SCRIPT_DIR/config/script/"*.sh \
-             "$SCRIPT_DIR/utils/"*.sh \
-             "$SCRIPT_DIR/lib/"*.sh 2>/dev/null || true
+    log-info "Installing Kionite Manager..."
     
-    while true; do
-        show-menu
-        read -rp "> " choice
-        
-        clear
-        case "$choice" in
-            1)
-                "$SCRIPT_DIR/config/index.sh"
-                ;;
-            2)
-                "$SCRIPT_DIR/utils/update-system.sh"
-                ;;
-            3)
-                "$SCRIPT_DIR/utils/delete-folder.sh"
-                ;;
-            4)
-                log-info "Goodbye!"
-                exit 0
-                ;;
-            *)
-                log-warn "Invalid option: $choice"
-                ;;
-        esac
-        
-        echo ""
-        read -rp "Press Enter to continue..."
-    done
+    set-permissions
+    configure-bashrc
+    
+    log-success "Installation completed!"
+    log-info "You can now run 'kionite' from anywhere (after restarting terminal)."
 }
 
 main "$@"
