@@ -48,8 +48,6 @@ Restart terminal, then run:
 sudo atomic
 ```
 
-> **Note:** If `sudo atomic` shows "command not found", run directly: `sudo ./index.sh`
-
 ## Structure
 
 ```

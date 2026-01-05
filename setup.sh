@@ -27,40 +27,39 @@ set-permissions() {
              "$SCRIPT_DIR/lib/"*.sh 2>/dev/null || true
 }
 
-configure-bashrc() {
-    log-info "Configuring .bashrc..."
+install-symlink() {
+    log-info "Installing symlink..."
     
+    local link_path="/usr/bin/atomic"
+    
+    if [[ -L "$link_path" ]]; then
+        rm "$link_path"
+    fi
+    
+    ln -s "$SCRIPT_DIR/index.sh" "$link_path"
+    
+    if [[ -x "$link_path" ]]; then
+        log-success "Symlink created at $link_path"
+    else
+        log-error "Failed to create symlink"
+        exit 1
+    fi
+    
+    # Cleanup old aliases if they exist
     local user_home
     user_home="$(get-user-home)"
     local bashrc="$user_home/.bashrc"
-    local alias_cmd="alias atomic=\"$SCRIPT_DIR/index.sh\""
     
-    if [[ ! -f "$bashrc" ]]; then
-        log-warn ".bashrc not found at $bashrc"
-        return
-    fi
-    
-    # Remove old kionite alias if exists
-    if grep -q "alias kionite=" "$bashrc"; then
-        sed -i '/# Kionite Manager/d' "$bashrc"
-        sed -i '/alias kionite=/d' "$bashrc"
-        log-info "Removed old 'kionite' alias"
-    fi
-    
-    if grep -q "alias atomic=" "$bashrc"; then
-        log-info "Alias 'atomic' already exists in .bashrc"
-    else
-        echo "" >> "$bashrc"
-        echo "# Fedora Atomic Manager" >> "$bashrc"
-        echo "$alias_cmd" >> "$bashrc"
-        
-        # Add alias sudo='sudo ' to allow alias expansion after sudo
-        if ! grep -q "alias sudo='sudo '" "$bashrc"; then
-            echo "alias sudo='sudo '" >> "$bashrc"
+    if [[ -f "$bashrc" ]]; then
+        if grep -q "alias atomic=" "$bashrc" || grep -q "alias kionite=" "$bashrc"; then
+            log-info "Cleaning up old aliases from .bashrc..."
+            sed -i '/# Fedora Atomic Manager/d' "$bashrc"
+            sed -i '/alias atomic=/d' "$bashrc"
+            sed -i '/# Kionite Manager/d' "$bashrc"
+            sed -i '/alias kionite=/d' "$bashrc"
+            sed -i "/alias sudo='sudo '/d" "$bashrc"
+            log-success "Aliases removed (using system-wide command instead)"
         fi
-        
-        log-success "Added 'atomic' alias to .bashrc"
-        log-info "Please restart your terminal or run: source ~/.bashrc"
     fi
 }
 
@@ -78,7 +77,8 @@ main() {
     log-info "Detected: $distro"
     
     set-permissions
-    configure-bashrc
+    set-permissions
+    install-symlink
     
     log-success "Installation completed!"
     log-info "You can now run 'atomic' from anywhere (after restarting terminal)."
