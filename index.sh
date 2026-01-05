@@ -7,7 +7,12 @@
 set -euo pipefail
 
 # Get script directory
-readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get script directory (follow symlinks)
+TARGET_FILE="${BASH_SOURCE[0]}"
+if [[ -L "$TARGET_FILE" ]]; then
+    TARGET_FILE="$(readlink -f "$TARGET_FILE")"
+fi
+readonly SCRIPT_DIR="$(cd "$(dirname "$TARGET_FILE")" && pwd)"
 
 # Source common library
 source "$SCRIPT_DIR/lib/common.sh"
