@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 # =============================================================================
 # Optimize Animations (Silverblue)
-# Configures GNOME Shell animations for Speed and Fluidity
 # =============================================================================
 
 set -euo pipefail
@@ -10,33 +9,32 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../lib/common.sh"
 
 optimize-animations() {
-    log-info "Optimizing GNOME Animations..."
+    log-info "Optimizing GNOME Animations for Fluidity..."
 
-    # Ensure animations are enabled globally
-    gsettings set org.gnome.desktop.interface enable-animations true
+    dconf write /org/gnome/desktop/interface/enable-animations true
     
-    # Just Perfection Animation Speed
-    # 1 = Very Slow
-    # 2 = Slow
-    # 3 = Standard
-    # 4 = Fast
-    # 5 = Very Fast
-    # 6 = Instant
-    
-    # We choose 4 (Fast) for "Fluid & Fast"
-    local speed=4
-    
-    # Check if Just Perfection schema path exists (via dconf) or just write it
-    # We assume the extension is installed via set-extensions.sh
-    
-    log-info "Setting Just Perfection Animation Speed to $speed (Fast)"
+    # Just Perfection Animation Speed: 5 = Very Fast
+    local speed=5
+    log-info "Setting Just Perfection Animation Speed to $speed (Very Fast)"
     dconf write /org/gnome/shell/extensions/just-perfection/animation "$speed"
 
-    # Additional fluid settings
-    # Center new windows (feels more predictable/faster)
-    gsettings set org.gnome.mutter center-new-windows true
+    # Dash to Dock Optimization
+    if dconf list /org/gnome/shell/extensions/dash-to-dock/ &>/dev/null; then
+        log-info "Optimizing Dash to Dock animations..."
+        dconf write /org/gnome/shell/extensions/dash-to-dock/animation-time 0.20
+    fi
     
-    log-success "GNOME animation settings applied."
+    # Blur My Shell Performance Tuning
+    if dconf list /org/gnome/shell/extensions/blur-my-shell/ &>/dev/null; then
+        log-info "Tuning Blur My Shell for performance..."
+        dconf write /org/gnome/shell/extensions/blur-my-shell/noise-amount 0.0
+        dconf write /org/gnome/shell/extensions/blur-my-shell/brightness 1.0
+        dconf write /org/gnome/shell/extensions/blur-my-shell/sigma 30
+    fi
+
+    dconf write /org/gnome/mutter/center-new-windows true
+    
+    log-success "GNOME animation and performance settings applied."
 }
 
 main() {

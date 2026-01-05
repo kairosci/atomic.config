@@ -1,7 +1,7 @@
 /* Clear existing panels */
 var allPanels = panels();
 for (var i = 0; i < allPanels.length; i++) {
-    allPanels[i].remove();
+   allPanels[i].remove();
 }
 
 /* Top Panel */
@@ -18,7 +18,8 @@ topPanel.height = 30;
    But we need "Activities" button? Usually that's on the dock or a hot corner.
    Let's assume standard Ubuntu: Top Bar has Clock in center. */
 
-var appMenu = topPanel.addWidget("org.kde.plasma.appmenu"); /* Global Menu */
+/* Activities button */
+var appMenu = topPanel.addWidget("org.kde.plasma.appmenu");
 var leftSpacer = topPanel.addWidget("org.kde.plasma.panelspacer");
 var clock = topPanel.addWidget("org.kde.plasma.digitalclock");
 var rightSpacer = topPanel.addWidget("org.kde.plasma.panelspacer");
@@ -28,7 +29,7 @@ var uks = topPanel.addWidget("org.kde.plasma.userswitcher");
 /* Left Dock (Panel) */
 var leftPanel = new Panel;
 leftPanel.location = "left";
-leftPanel.height = 48; /* Width in vertical mode */
+leftPanel.height = 48;
 leftPanel.offset = 0;
 
 /* Widgets for Left Dock
@@ -36,13 +37,20 @@ leftPanel.offset = 0;
    KDE: Kickoff is the best "Show Apps" equivalent. 
    We place Task Manager first, then Spacer, then Kickoff at bottom?
    Or Kickoff at top (Activities style)?
-   Let's go with: Kickoff (Top/Activities) -> TaskManager -> Spacer -> Trash */
+   Let's go with: Kickoff (Top/Activities) -> TaskManager -> Spacer -> Trash
+*/
 
+/* Kickoff */
 var appLauncher = leftPanel.addWidget("org.kde.plasma.kickoff");
-appLauncher.writeConfig("icon", "start-here"); /* Use distro icon or specific */
+appLauncher.writeConfig("icon", "start-here");
 
+/* Task Manager */
 var taskManager = leftPanel.addWidget("org.kde.plasma.icontasks");
+
+/* Spacer */
 var dockSpacer = leftPanel.addWidget("org.kde.plasma.panelspacer");
+
+/* Trash */
 var trash = leftPanel.addWidget("org.kde.plasma.trash");
 
 /* Configure Task Manager (optional) */
