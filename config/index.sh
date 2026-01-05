@@ -59,6 +59,7 @@ run-scripts() {
         silverblue)
             distro_scripts=(
                 "./silverblue/set-yaru.sh"
+                "./silverblue/set-extensions.sh"
             )
             ;;
         *)
