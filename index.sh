@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
-# Kionite Setup Manager
-# Interactive menu for system management
+# Fedora Atomic Manager
+# Interactive menu for system management (Kionite / Silverblue)
 # =============================================================================
 
 set -euo pipefail
@@ -17,9 +17,13 @@ source "$SCRIPT_DIR/lib/common.sh"
 # =============================================================================
 
 show-menu() {
+    local distro
+    distro="$(detect-distro)"
+    
     clear
     echo "================================"
-    echo "       Kionite Manager"
+    echo "    Fedora Atomic Manager"
+    echo "       [$distro]"
     echo "================================"
     echo ""
     echo "  1. Optimize System"
@@ -40,6 +44,8 @@ main() {
     # Set executable permissions
     chmod +x "$SCRIPT_DIR/config/index.sh" \
              "$SCRIPT_DIR/config/script/"*.sh \
+             "$SCRIPT_DIR/config/script/kionite/"*.sh \
+             "$SCRIPT_DIR/config/script/silverblue/"*.sh \
              "$SCRIPT_DIR/utils/"*.sh \
              "$SCRIPT_DIR/lib/"*.sh 2>/dev/null || true
     
