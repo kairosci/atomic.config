@@ -1,30 +1,30 @@
 # Fedora Atomic Config
 
-> 🚀 Configuration scripts for **Fedora Kionite** (KDE Plasma) and **Fedora Silverblue** (GNOME) with automatic distro detection.
+Configuration scripts for **Fedora Kionite** (KDE Plasma) and **Fedora Silverblue** (GNOME) with automatic distro detection.
 
-## ✨ Features
+## Features
 
 | Feature | Kionite | Silverblue |
 |---------|:-------:|:----------:|
-| Distro Detection | ✅ | ✅ |
-| Remove Bloatware | ✅ | ✅ |
-| Install Brave Browser | ✅ | ✅ |
-| Flatpak Setup | ✅ | ✅ |
-| TLP Power Management | ✅ | ✅ |
-| Distrobox | ✅ | ✅ |
-| Libvirt/QEMU | ✅ | ✅ |
-| Yaru Theme | ❌ | ✅ |
-| GNOME Extensions | ❌ | ✅ |
-| KDE Launcher Fix | ✅ | ❌ |
-| Konsole Profile | ✅ | ❌ |
+| Distro Detection | Yes | Yes |
+| Remove Bloatware | Yes | Yes |
+| Install Brave Browser | Yes | Yes |
+| Flatpak Setup | Yes | Yes |
+| TLP Power Management | Yes | Yes |
+| Distrobox | Yes | Yes |
+| Libvirt/QEMU | Yes | Yes |
+| Yaru Theme | No | Yes |
+| GNOME Extensions | No | Yes |
+| KDE Launcher Fix | Yes | No |
+| Konsole Profile | Yes | No |
 
-## 🎨 Themes
+## Themes
 
 **Kionite:** Breeze GTK + Adwaita GTK3
 
 **Silverblue:** Yaru (GTK, icons, cursor, sounds) + Dark mode
 
-## 🔌 GNOME Extensions (Silverblue)
+## GNOME Extensions (Silverblue)
 
 Scripts configure Ubuntu-like experience:
 
@@ -34,7 +34,7 @@ Scripts configure Ubuntu-like experience:
 - **Just Perfection** — Desktop tweaks, faster animations
 - **Caffeine** — Prevent auto-suspend
 
-## 📦 Installation
+## Installation
 
 ```bash
 git clone https://codeberg.org/kairosci/kionite-config.git
@@ -50,7 +50,7 @@ sudo atomic
 
 > **Note:** If `sudo atomic` shows "command not found", run directly: `sudo ./index.sh`
 
-## 🗂️ Structure
+## Structure
 
 ```
 ├── lib/common.sh           # Shared utilities + detect-distro()
@@ -63,10 +63,10 @@ sudo atomic
 └── utils/                  # Utility scripts
 ```
 
-## 🛠️ Dev Tools
+## Dev Tools
 
 > **Note:** Development packages (nodejs, clang, cmake...) should be installed inside **Distrobox** containers, not in the base system.
 
-## 📜 License
+## License
 
 MIT

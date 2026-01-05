@@ -50,6 +50,7 @@ readonly -a KIONITE_PACKAGES_TO_INSTALL=(
     "qemu-kvm"
     "distrobox"
     "rsms-inter-fonts"
+    "google-noto-emoji-fonts"
     "breeze-gtk"
     "adw-gtk3-theme"
 )
@@ -87,6 +88,7 @@ readonly -a SILVERBLUE_PACKAGES_TO_INSTALL=(
     "qemu-kvm"
     "distrobox"
     "rsms-inter-fonts"
+    "google-noto-emoji-fonts"
     "yaru-theme"
     "yaru-gtk3-theme"
     "yaru-gtk4-theme"
