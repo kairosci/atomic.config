@@ -44,7 +44,7 @@ enable-user-extensions() {
     real_user="$(get-real-user)"
     
     # Enable user extensions globally
-    sudo -u "$real_user" dconf write /org/gnome/shell/disable-user-extensions false
+    dconf write /org/gnome/shell/disable-user-extensions false
     
     log-success "User extensions enabled"
 }
@@ -52,26 +52,23 @@ enable-user-extensions() {
 configure-dash-to-dock() {
     log-info "Configuring Dash to Dock (Ubuntu-style)"
     
-    local real_user
-    real_user="$(get-real-user)"
-    
     # Set dock position to bottom (Ubuntu-style)
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/dock-position "'BOTTOM'"
+    dconf write /org/gnome/shell/extensions/dash-to-dock/dock-position "'BOTTOM'"
     
     # Extend dock across screen
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/extend-height false
+    dconf write /org/gnome/shell/extensions/dash-to-dock/extend-height false
     
     # Show on all monitors
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/multi-monitor true
+    dconf write /org/gnome/shell/extensions/dash-to-dock/multi-monitor true
     
     # Auto-hide behavior
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/intellihide-mode "'ALL_WINDOWS'"
+    dconf write /org/gnome/shell/extensions/dash-to-dock/intellihide-mode "'ALL_WINDOWS'"
     
     # Icon size
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/dash-max-icon-size 48
+    dconf write /org/gnome/shell/extensions/dash-to-dock/dash-max-icon-size 48
     
     # Transparency
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/dash-to-dock/transparency-mode "'DYNAMIC'"
+    dconf write /org/gnome/shell/extensions/dash-to-dock/transparency-mode "'DYNAMIC'"
     
     log-success "Dash to Dock configured"
 }
@@ -79,17 +76,14 @@ configure-dash-to-dock() {
 configure-just-perfection() {
     log-info "Configuring Just Perfection (desktop tweaks)"
     
-    local real_user
-    real_user="$(get-real-user)"
-    
     # Hide search on overview
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/just-perfection/search false
+    dconf write /org/gnome/shell/extensions/just-perfection/search false
     
     # Show workspaces in overview
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/just-perfection/workspace true
+    dconf write /org/gnome/shell/extensions/just-perfection/workspace true
     
     # Animation speed (faster)
-    sudo -u "$real_user" dconf write /org/gnome/shell/extensions/just-perfection/animation 2
+    dconf write /org/gnome/shell/extensions/just-perfection/animation 2
     
     log-success "Just Perfection configured"
 }
@@ -122,17 +116,17 @@ print-extension-instructions() {
 # =============================================================================
 
 main() {
-    require-root
+    ensure-user
     
     install-extension-manager
     enable-user-extensions
     
     # Try to configure extensions if they're installed
-    if dconf list /org/gnome/shell/extensions/dash-to-dock/ &>/dev/null; then
+    if command -v dconf &>/dev/null && dconf list /org/gnome/shell/extensions/dash-to-dock/ &>/dev/null; then
         configure-dash-to-dock
     fi
     
-    if dconf list /org/gnome/shell/extensions/just-perfection/ &>/dev/null; then
+    if command -v dconf &>/dev/null && dconf list /org/gnome/shell/extensions/just-perfection/ &>/dev/null; then
         configure-just-perfection
     fi
     

@@ -44,7 +44,7 @@ show-menu() {
 # =============================================================================
 
 main() {
-    require-root
+    # require-root (now handled per-script)
     
     # Set executable permissions
     chmod +x "$SCRIPT_DIR/config/index.sh" \

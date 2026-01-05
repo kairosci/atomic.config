@@ -179,6 +179,7 @@ EOF
 # =============================================================================
 
 main() {
+    ensure-root
     local distro
     distro="$(detect-distro)"
     

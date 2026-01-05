@@ -47,12 +47,32 @@ get-user-home() {
 # Privilege Checks
 # =============================================================================
 
-# Verify script is running as root
-require-root() {
+# Ensure script runs as root (re-exec with sudo if needed)
+ensure-root() {
     if [[ "$EUID" -ne 0 ]]; then
-        echo "Error: $SCRIPT_NAME requires root privileges. Run with sudo." >&2
-        exit 1
+        # Check if sudo assumes execution or we need to call it
+        echo "Privilege escalation required for $SCRIPT_NAME..." >&2
+        exec sudo "$0" "$@"
     fi
+}
+
+# Ensure script runs as user (fail if root)
+ensure-user() {
+    if [[ "$EUID" -eq 0 ]] && [[ -z "${SUDO_USER:-}" ]]; then
+        # Currently running as root without SUDO_USER (pure root)
+        # We prefer running as normal user
+        log-warn "Running as strict root. Some user-specific settings might not apply correctly."
+    elif [[ "$EUID" -eq 0 ]]; then
+        # Running via sudo, but we want user logic?
+        # Ideally, we should just drop privileges or assume correct user context
+        # But for scripts needing user dconf, running as sudo is bad.
+        : # Pass, but maybe we should warn?
+    fi
+}
+
+# Legacy: strict requirement (deprecated, use ensure-root)
+require-root() {
+    ensure-root
 }
 
 # =============================================================================

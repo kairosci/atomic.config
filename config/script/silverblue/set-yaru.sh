@@ -30,23 +30,23 @@ apply-yaru-theme() {
     
     # Set GTK theme
     log-info "Setting GTK theme to $GTK_THEME"
-    sudo -u "$real_user" dconf write /org/gnome/desktop/interface/gtk-theme "'$GTK_THEME'"
+    dconf write /org/gnome/desktop/interface/gtk-theme "'$GTK_THEME'"
     
     # Set icon theme
     log-info "Setting icon theme to $ICON_THEME"
-    sudo -u "$real_user" dconf write /org/gnome/desktop/interface/icon-theme "'$ICON_THEME'"
+    dconf write /org/gnome/desktop/interface/icon-theme "'$ICON_THEME'"
     
     # Set cursor theme
     log-info "Setting cursor theme to $CURSOR_THEME"
-    sudo -u "$real_user" dconf write /org/gnome/desktop/interface/cursor-theme "'$CURSOR_THEME'"
+    dconf write /org/gnome/desktop/interface/cursor-theme "'$CURSOR_THEME'"
     
     # Set sound theme
     log-info "Setting sound theme to $SOUND_THEME"
-    sudo -u "$real_user" dconf write /org/gnome/desktop/sound/theme-name "'$SOUND_THEME'"
+    dconf write /org/gnome/desktop/sound/theme-name "'$SOUND_THEME'"
     
     # Set color scheme to prefer dark
     log-info "Setting dark color scheme"
-    sudo -u "$real_user" dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
+    dconf write /org/gnome/desktop/interface/color-scheme "'prefer-dark'"
     
     log-success "Yaru theme applied successfully"
 }
@@ -56,7 +56,7 @@ apply-yaru-theme() {
 # =============================================================================
 
 main() {
-    require-root
+    ensure-user
     apply-yaru-theme
 }
 

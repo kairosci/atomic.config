@@ -99,7 +99,7 @@ run-scripts() {
 # =============================================================================
 
 main() {
-    require-root
+    # require-root (now handled per-script)
     run-scripts
 }
 

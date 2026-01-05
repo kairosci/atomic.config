@@ -119,6 +119,7 @@ install-apps() {
 # =============================================================================
 
 main() {
+    ensure-root
     local distro
     distro="$(detect-distro)"
     
