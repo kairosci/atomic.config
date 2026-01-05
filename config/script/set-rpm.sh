@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
 # Set RPM Packages
-# Manages rpm-ostree packages: removes defaults, adds repos, installs packages
+# Manages rpm-ostree packages for Kionite and Silverblue
 # =============================================================================
 
 set -euo pipefail
@@ -10,10 +10,10 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
 # =============================================================================
-# Constants
+# Constants - Kionite (KDE Plasma)
 # =============================================================================
 
-readonly -a PACKAGES_TO_REMOVE=(
+readonly -a KIONITE_PACKAGES_TO_REMOVE=(
     "ibus-typing-booster"
     "kde-connect"
     "kde-connect-libs"
@@ -41,18 +41,12 @@ readonly -a PACKAGES_TO_REMOVE=(
     "toolbox"
 )
 
-readonly -a PACKAGES_TO_INSTALL=(
-    "clang"
-    "cmake"
-    "java-latest-openjdk"
+readonly -a KIONITE_PACKAGES_TO_INSTALL=(
     "kalk"
     "ksshaskpass"
     "libvirt"
     "tlp"
     "tlp-rdw"
-    "make"
-    "ncurses-devel"
-    "nodejs"
     "qemu-kvm"
     "distrobox"
     "rsms-inter-fonts"
@@ -61,17 +55,60 @@ readonly -a PACKAGES_TO_INSTALL=(
 )
 
 # =============================================================================
+# Constants - Silverblue (GNOME)
+# =============================================================================
+
+readonly -a SILVERBLUE_PACKAGES_TO_REMOVE=(
+    "gnome-software"
+    "gnome-software-rpm-ostree"
+    "gnome-contacts"
+    "gnome-maps"
+    "gnome-weather"
+    "gnome-tour"
+    "gnome-connections"
+    "gnome-characters"
+    "gnome-font-viewer"
+    "gnome-logs"
+    "gnome-remote-desktop"
+    "simple-scan"
+    "totem"
+    "cheese"
+    "rhythmbox"
+    "yelp"
+    "firefox"
+    "firefox-langpacks"
+    "toolbox"
+)
+
+readonly -a SILVERBLUE_PACKAGES_TO_INSTALL=(
+    "libvirt"
+    "tlp"
+    "tlp-rdw"
+    "qemu-kvm"
+    "distrobox"
+    "rsms-inter-fonts"
+    "yaru-theme"
+    "yaru-gtk3-theme"
+    "yaru-gtk4-theme"
+    "yaru-icon-theme"
+    "yaru-sound-theme"
+)
+
+# =============================================================================
 # Functions
 # =============================================================================
 
 remove-base-packages() {
-    log-info "Removing base packages"
+    local distro="$1"
+    local -n packages_ref="$2"
+    
+    log-info "Removing base packages for $distro"
     
     local -a valid_packages=()
     local ostree_status
     ostree_status="$(rpm-ostree status)"
     
-    for pkg in "${PACKAGES_TO_REMOVE[@]}"; do
+    for pkg in "${packages_ref[@]}"; do
         if rpm -q "$pkg" &>/dev/null; then
             if echo "$ostree_status" | grep -Fq "$pkg"; then
                 log-info "Skipping $pkg (already has override)"
@@ -105,10 +142,12 @@ install-third-party-repos() {
 }
 
 install-packages() {
+    local -n packages_ref="$1"
+    
     log-info "Installing packages"
     
-    if [[ ${#PACKAGES_TO_INSTALL[@]} -gt 0 ]]; then
-        rpm-ostree install --idempotent "${PACKAGES_TO_INSTALL[@]}"
+    if [[ ${#packages_ref[@]} -gt 0 ]]; then
+        rpm-ostree install --idempotent "${packages_ref[@]}"
         log-success "Packages installed"
     fi
 }
@@ -138,9 +177,29 @@ EOF
 # =============================================================================
 
 main() {
-    remove-base-packages
-    install-third-party-repos
-    install-packages
+    local distro
+    distro="$(detect-distro)"
+    
+    log-info "Detected distro: $distro"
+    
+    case "$distro" in
+        kionite)
+            remove-base-packages "Kionite" KIONITE_PACKAGES_TO_REMOVE
+            install-third-party-repos
+            install-packages KIONITE_PACKAGES_TO_INSTALL
+            ;;
+        silverblue)
+            remove-base-packages "Silverblue" SILVERBLUE_PACKAGES_TO_REMOVE
+            install-third-party-repos
+            install-packages SILVERBLUE_PACKAGES_TO_INSTALL
+            ;;
+        *)
+            log-error "Unknown distro: $distro"
+            log-error "This script only supports Kionite and Silverblue"
+            exit 1
+            ;;
+    esac
+    
     install-google-antigravity
 }
 

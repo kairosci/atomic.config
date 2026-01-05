@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
-# Kionite Common Library
-# Shared functions and utilities for all Kionite scripts
+# Fedora Atomic Common Library
+# Shared functions and utilities for Kionite/Silverblue scripts
 # =============================================================================
 
 # Strict mode settings
@@ -11,6 +11,21 @@ set -euo pipefail
 # Constants
 # =============================================================================
 readonly SCRIPT_NAME="${0##*/}"
+
+# =============================================================================
+# Distro Detection
+# =============================================================================
+
+# Detect which Fedora Atomic variant we're on
+detect-distro() {
+    if grep -qi "Kinoite" /etc/os-release 2>/dev/null; then
+        echo "kionite"
+    elif grep -qi "Silverblue" /etc/os-release 2>/dev/null; then
+        echo "silverblue"
+    else
+        echo "unknown"
+    fi
+}
 
 # =============================================================================
 # User Detection
