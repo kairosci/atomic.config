@@ -30,7 +30,13 @@ set-permissions() {
 install-symlink() {
     log-info "Installing symlink..."
     
-    local link_path="/usr/bin/atomic"
+    # Use /usr/local/bin as /usr/bin is read-only on Silverblue/Kionite
+    local link_path="/usr/local/bin/atomic"
+    
+    # Ensure /usr/local/bin exists
+    if [[ ! -d "/usr/local/bin" ]]; then
+        mkdir -p "/usr/local/bin"
+    fi
     
     if [[ -L "$link_path" ]]; then
         rm "$link_path"
