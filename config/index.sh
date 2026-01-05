@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
-# Kionite Configuration Index
-# Main entry point for system configuration
+# Fedora Atomic Configuration Index
+# Main entry point for system configuration (Kionite / Silverblue)
 # =============================================================================
 
 set -euo pipefail
@@ -17,7 +17,10 @@ source "$SCRIPT_DIR/../lib/common.sh"
 # =============================================================================
 
 run-scripts() {
-    log-info "Starting Kionite configuration"
+    local distro
+    distro="$(detect-distro)"
+    
+    log-info "Starting configuration for $distro"
     
     local scripts_dir="$SCRIPT_DIR/script"
     
@@ -28,24 +31,44 @@ run-scripts() {
     
     cd "$scripts_dir"
     
-    # Configuration scripts in execution order
-    local -a scripts=(
+    # Common scripts for all distros
+    local -a common_scripts=(
         "./hide-grub.sh"
         "./rename-btrfs.sh"
         "./set-flatpak.sh"
-        "./disable-emojier.sh"
         "./hide-urw-fonts.sh"
         "./set-rpm.sh"
         "./set-spotify-pwa.sh"
         "./set-protonmail-pwa.sh"
-        "./set-launcher-icon.sh"
         "./manage-system.sh"
         "./set-safe-delete.sh"
         "./set-omb.sh"
-        "./set-konsole.sh"
     )
     
-    for script in "${scripts[@]}"; do
+    # Distro-specific scripts
+    local -a distro_scripts=()
+    
+    case "$distro" in
+        kionite)
+            distro_scripts=(
+                "./kionite/disable-emojier.sh"
+                "./kionite/set-launcher-icon.sh"
+                "./kionite/set-konsole.sh"
+            )
+            ;;
+        silverblue)
+            distro_scripts=(
+                "./silverblue/set-yaru.sh"
+            )
+            ;;
+        *)
+            log-warn "Unknown distro: $distro, running common scripts only"
+            ;;
+    esac
+    
+    # Run common scripts
+    log-info "Running common scripts..."
+    for script in "${common_scripts[@]}"; do
         if [[ -f "$script" ]]; then
             log-info "Executing: $script"
             "$script"
@@ -54,7 +77,20 @@ run-scripts() {
         fi
     done
     
-    log-success "Configuration completed"
+    # Run distro-specific scripts
+    if [[ ${#distro_scripts[@]} -gt 0 ]]; then
+        log-info "Running $distro-specific scripts..."
+        for script in "${distro_scripts[@]}"; do
+            if [[ -f "$script" ]]; then
+                log-info "Executing: $script"
+                "$script"
+            else
+                log-warn "Script not found: $script"
+            fi
+        done
+    fi
+    
+    log-success "Configuration completed for $distro"
 }
 
 # =============================================================================
