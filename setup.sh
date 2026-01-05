@@ -48,11 +48,17 @@ configure-bashrc() {
     fi
     
     if grep -q "alias atomic=" "$bashrc"; then
-        log-info "Alias already exists in .bashrc"
+        log-info "Alias 'atomic' already exists in .bashrc"
     else
         echo "" >> "$bashrc"
         echo "# Fedora Atomic Manager" >> "$bashrc"
         echo "$alias_cmd" >> "$bashrc"
+        
+        # Add alias sudo='sudo ' to allow alias expansion after sudo
+        if ! grep -q "alias sudo='sudo '" "$bashrc"; then
+            echo "alias sudo='sudo '" >> "$bashrc"
+        fi
+        
         log-success "Added 'atomic' alias to .bashrc"
         log-info "Please restart your terminal or run: source ~/.bashrc"
     fi
