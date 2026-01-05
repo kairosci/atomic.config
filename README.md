@@ -1,70 +1,72 @@
-# Fedora Atomic Configuration
+# Fedora Atomic Config
 
-Configuration scripts for **Fedora Kionite** (KDE Plasma) and **Fedora Silverblue** (GNOME). The scripts automatically detect which distro you're running and apply the appropriate configuration.
+> 🚀 Configuration scripts for **Fedora Kionite** (KDE Plasma) and **Fedora Silverblue** (GNOME) with automatic distro detection.
 
-## Quick Start
+## ✨ Features
+
+| Feature | Kionite | Silverblue |
+|---------|:-------:|:----------:|
+| Distro Detection | ✅ | ✅ |
+| Remove Bloatware | ✅ | ✅ |
+| Install Brave Browser | ✅ | ✅ |
+| Flatpak Setup | ✅ | ✅ |
+| TLP Power Management | ✅ | ✅ |
+| Distrobox | ✅ | ✅ |
+| Libvirt/QEMU | ✅ | ✅ |
+| Yaru Theme | ❌ | ✅ |
+| GNOME Extensions | ❌ | ✅ |
+| KDE Launcher Fix | ✅ | ❌ |
+| Konsole Profile | ✅ | ❌ |
+
+## 🎨 Themes
+
+**Kionite:** Breeze GTK + Adwaita GTK3
+
+**Silverblue:** Yaru (GTK, icons, cursor, sounds) + Dark mode
+
+## 🔌 GNOME Extensions (Silverblue)
+
+Scripts configure Ubuntu-like experience:
+
+- **Dash to Dock** — Bottom dock with intellihide
+- **AppIndicator** — System tray icons
+- **Blur my Shell** — Blur effects
+- **Just Perfection** — Desktop tweaks, faster animations
+- **Caffeine** — Prevent auto-suspend
+
+## 📦 Installation
 
 ```bash
+git clone https://codeberg.org/kairosci/kionite-config.git
+cd kionite-config
 sudo ./setup.sh
-# Restart terminal, then run:
-kionite
 ```
 
-## Distro Detection
+Restart terminal, then run:
 
-All scripts automatically detect whether you're running Kionite or Silverblue by checking `/etc/os-release`.
+```bash
+sudo atomic
+```
 
-## Scripts
+> **Note:** If `sudo atomic` shows "command not found", run directly: `sudo ./index.sh`
 
-### set_rpm.sh
+## 🗂️ Structure
 
-Manages rpm-ostree packages with distro-specific configuration:
+```
+├── lib/common.sh           # Shared utilities + detect-distro()
+├── config/
+│   ├── index.sh            # Main entry point
+│   └── script/
+│       ├── kionite/        # KDE-specific scripts
+│       ├── silverblue/     # GNOME-specific scripts
+│       └── *.sh            # Common scripts
+└── utils/                  # Utility scripts
+```
 
-**Kionite (KDE Plasma):**
+## 🛠️ Dev Tools
 
-- Removes: KDE Connect, Plasma Discover, Firefox, Toolbox, etc.
-- Installs: kalk, ksshaskpass, libvirt, tlp, distrobox, breeze-gtk, adw-gtk3-theme
+> **Note:** Development packages (nodejs, clang, cmake...) should be installed inside **Distrobox** containers, not in the base system.
 
-**Silverblue (GNOME):**
+## 📜 License
 
-- Removes: gnome-software, gnome-contacts, gnome-maps, Firefox, Toolbox, etc.
-- Installs: libvirt, tlp, distrobox, **yaru-theme** (GTK, icons, sounds)
-
-**Both:**
-
-- Installs Brave browser repository
-- Installs Antigravity
-
-### set_flatpak.sh
-
-Manages Flatpak applications:
-
-- Removes default apps (KDE games for Kionite, GNOME apps for Silverblue)
-- Adds Flathub repository
-- Installs Discord
-
-### manage_system.sh
-
-System maintenance and cleanup:
-
-- Clears journal logs
-- Cleans rpm-ostree cache
-- Removes distro-specific user configs
-- System upgrade
-- Flatpak maintenance
-
-### Other Scripts
-
-- `hide_grub.sh`: Sets GRUB timeout to 0
-- `rename_btrfs.sh`: Standardizes BTRFS labels
-- `disable_emojier.sh`: Disables Plasma emoji selector (Kionite only)
-
-## Utilities
-
-- `update-system.sh`: Quick system update
-- `delete-folder.sh`: Interactive folder deletion
-- `toggle-folder-protection.sh`: Enable/disable immutable flag
-
-## Development Packages
-
-> **Note:** Development tools (nodejs, clang, cmake, etc.) should be installed inside Distrobox containers, not in the base system.
+MIT
