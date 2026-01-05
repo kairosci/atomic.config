@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # =============================================================================
 # Set Flatpak Apps
-# Removes default apps and installs curated selection
+# Removes default apps and installs curated selection for Kionite/Silverblue
 # =============================================================================
 
 set -euo pipefail
@@ -10,16 +10,37 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
 # =============================================================================
-# Constants
+# Constants - Kionite (KDE)
 # =============================================================================
 
-readonly -a APPS_TO_REMOVE=(
-    "org.fedoraproject.Platform.GL.default"
+readonly -a KIONITE_APPS_TO_REMOVE=(
     "org.kde.kmahjongg"
     "org.kde.kmines"
     "org.kde.kolourpaint"
     "org.kde.krdc"
     "org.kde.skanpage"
+)
+
+# =============================================================================
+# Constants - Silverblue (GNOME)
+# =============================================================================
+
+readonly -a SILVERBLUE_APPS_TO_REMOVE=(
+    "org.gnome.Contacts"
+    "org.gnome.Maps"
+    "org.gnome.Weather"
+    "org.gnome.Cheese"
+    "org.gnome.Totem"
+    "org.gnome.Rhythmbox3"
+    "org.gnome.Characters"
+)
+
+# =============================================================================
+# Constants - Common
+# =============================================================================
+
+readonly -a COMMON_APPS_TO_REMOVE=(
+    "org.fedoraproject.Platform.GL.default"
 )
 
 readonly -a APPS_TO_INSTALL=(
@@ -31,19 +52,42 @@ readonly -a APPS_TO_INSTALL=(
 # =============================================================================
 
 remove-defaults() {
-    log-info "Removing default Flatpak apps"
+    local distro="$1"
+    
+    log-info "Removing default Flatpak apps for $distro"
     
     local -a valid_apps=()
     local installed_apps
     installed_apps="$(flatpak list --app --columns=application 2>/dev/null || true)"
     
-    for app in "${APPS_TO_REMOVE[@]}"; do
+    # Common apps
+    for app in "${COMMON_APPS_TO_REMOVE[@]}"; do
         if echo "$installed_apps" | grep -q "$app"; then
             valid_apps+=("$app")
-        else
-            log-info "Skipping $app (not installed)"
         fi
     done
+    
+    # Distro-specific apps
+    case "$distro" in
+        kionite)
+            for app in "${KIONITE_APPS_TO_REMOVE[@]}"; do
+                if echo "$installed_apps" | grep -q "$app"; then
+                    valid_apps+=("$app")
+                else
+                    log-info "Skipping $app (not installed)"
+                fi
+            done
+            ;;
+        silverblue)
+            for app in "${SILVERBLUE_APPS_TO_REMOVE[@]}"; do
+                if echo "$installed_apps" | grep -q "$app"; then
+                    valid_apps+=("$app")
+                else
+                    log-info "Skipping $app (not installed)"
+                fi
+            done
+            ;;
+    esac
     
     if [[ ${#valid_apps[@]} -gt 0 ]]; then
         flatpak uninstall --delete-data -y "${valid_apps[@]}"
@@ -75,7 +119,12 @@ install-apps() {
 # =============================================================================
 
 main() {
-    remove-defaults
+    local distro
+    distro="$(detect-distro)"
+    
+    log-info "Detected distro: $distro"
+    
+    remove-defaults "$distro"
     setup-remotes
     install-apps
 }

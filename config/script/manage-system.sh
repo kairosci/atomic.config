@@ -10,10 +10,10 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
 # =============================================================================
-# Constants
+# Constants - Kionite (KDE)
 # =============================================================================
 
-readonly -a CONFIG_DIRS=(
+readonly -a KIONITE_CONFIG_DIRS=(
     ".config/kdeconnect"
     ".config/kdeconnectrc"
     ".config/plasma-welcomerc"
@@ -23,10 +23,7 @@ readonly -a CONFIG_DIRS=(
     ".config/kcharselectrc"
     ".config/plasmaemojierrc"
     ".config/drkonqirc"
-    ".mozilla"
-    ".config/ibus/typing-booster"
     ".config/krfbrc"
-    ".config/toolboxrc"
     ".config/discoverrc"
     ".config/kdeveloprc"
     ".config/kmail2rc"
@@ -37,7 +34,7 @@ readonly -a CONFIG_DIRS=(
     ".config/ksplashrc"
 )
 
-readonly -a SHARE_DIRS=(
+readonly -a KIONITE_SHARE_DIRS=(
     ".local/share/akonadi"
     ".local/share/akonadi_migration_agent"
     ".local/share/gravatar"
@@ -45,12 +42,7 @@ readonly -a SHARE_DIRS=(
     ".local/share/kdevelop"
     ".local/share/kmail2"
     ".local/share/local-mail"
-    ".local/share/logs"
     ".local/share/phishingurl"
-    ".local/share/user-places.xbel"
-    ".local/share/user-places.xbel.bak"
-    ".local/share/user-places.xbel.tbcache"
-    ".local/share/recently-used.xbel"
     ".local/share/baloo"
     ".local/share/contacts"
     ".local/share/kactivitymanagerd"
@@ -59,6 +51,50 @@ readonly -a SHARE_DIRS=(
     ".local/share/libkunitconversion"
     ".local/share/ksshaskpass"
     ".local/share/knewstuff3"
+)
+
+# =============================================================================
+# Constants - Silverblue (GNOME)
+# =============================================================================
+
+readonly -a SILVERBLUE_CONFIG_DIRS=(
+    ".config/gnome-software"
+    ".config/gnome-tour"
+    ".config/gnome-contacts"
+    ".config/gnome-weather"
+    ".config/gnome-maps"
+    ".config/totem"
+    ".config/cheese"
+    ".config/rhythmbox"
+    ".config/yelp"
+)
+
+readonly -a SILVERBLUE_SHARE_DIRS=(
+    ".local/share/gnome-software"
+    ".local/share/gnome-maps"
+    ".local/share/gnome-weather"
+    ".local/share/totem"
+    ".local/share/cheese"
+    ".local/share/rhythmbox"
+    ".local/share/yelp"
+)
+
+# =============================================================================
+# Constants - Common (both distros)
+# =============================================================================
+
+readonly -a COMMON_CONFIG_DIRS=(
+    ".mozilla"
+    ".config/ibus/typing-booster"
+    ".config/toolboxrc"
+)
+
+readonly -a COMMON_SHARE_DIRS=(
+    ".local/share/logs"
+    ".local/share/user-places.xbel"
+    ".local/share/user-places.xbel.bak"
+    ".local/share/user-places.xbel.tbcache"
+    ".local/share/recently-used.xbel"
     ".local/share/toolbox"
     ".local/share/waydroid"
 )
@@ -75,18 +111,40 @@ system-cleanup() {
 }
 
 remove-user-configs() {
-    log-info "Removing user configs"
+    local distro="$1"
+    
+    log-info "Removing user configs for $distro"
     
     local user_home
     user_home="$(get-user-home)"
     
-    for dir in "${CONFIG_DIRS[@]}"; do
+    # Remove common dirs
+    for dir in "${COMMON_CONFIG_DIRS[@]}"; do
+        rm -rf "$user_home/$dir"
+    done
+    for dir in "${COMMON_SHARE_DIRS[@]}"; do
         rm -rf "$user_home/$dir"
     done
     
-    for dir in "${SHARE_DIRS[@]}"; do
-        rm -rf "$user_home/$dir"
-    done
+    # Remove distro-specific dirs
+    case "$distro" in
+        kionite)
+            for dir in "${KIONITE_CONFIG_DIRS[@]}"; do
+                rm -rf "$user_home/$dir"
+            done
+            for dir in "${KIONITE_SHARE_DIRS[@]}"; do
+                rm -rf "$user_home/$dir"
+            done
+            ;;
+        silverblue)
+            for dir in "${SILVERBLUE_CONFIG_DIRS[@]}"; do
+                rm -rf "$user_home/$dir"
+            done
+            for dir in "${SILVERBLUE_SHARE_DIRS[@]}"; do
+                rm -rf "$user_home/$dir"
+            done
+            ;;
+    esac
     
     log-success "User configs removed"
 }
@@ -111,8 +169,13 @@ flatpak-maintenance() {
 # =============================================================================
 
 main() {
+    local distro
+    distro="$(detect-distro)"
+    
+    log-info "Detected distro: $distro"
+    
     system-cleanup
-    remove-user-configs
+    remove-user-configs "$distro"
     system-upgrade
     flatpak-maintenance
 }
