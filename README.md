@@ -45,8 +45,10 @@ sudo ./setup.sh
 Restart terminal, then run:
 
 ```bash
-kionite
+sudo atomic
 ```
+
+> **Note:** If `sudo atomic` shows "command not found", run directly: `sudo ./index.sh`
 
 ## 🗂️ Structure
 
