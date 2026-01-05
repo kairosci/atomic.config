@@ -13,28 +13,38 @@ source "$SCRIPT_DIR/../../lib/common.sh"
 # Constants
 # =============================================================================
 
-readonly GRUB_CONFIG="/boot/grub2/grub.cfg"
+
 
 # =============================================================================
 # Main Function
 # =============================================================================
 
 hide-grub() {
+    ensure-root
     log-info "Hiding GRUB menu"
     
-    if [[ ! -f "$GRUB_CONFIG" ]]; then
-        log-warn "GRUB config not found: $GRUB_CONFIG"
+    local grub_config=""
+    
+    # Check common GRUB config locations
+    if [[ -f "/boot/grub2/grub.cfg" ]]; then
+        grub_config="/boot/grub2/grub.cfg"
+    elif [[ -f "/boot/efi/EFI/fedora/grub.cfg" ]]; then
+        grub_config="/boot/efi/EFI/fedora/grub.cfg"
+    else
+        log-warn "GRUB config not found in standard locations"
         return 0
     fi
     
+    log-info "Found GRUB config at: $grub_config"
+    
     # Backup original
-    cp "$GRUB_CONFIG" "${GRUB_CONFIG}.bak"
+    cp "$grub_config" "${grub_config}.bak"
     
     # Set timeout to 0
-    sed -i 's/^set timeout=.*/set timeout=0/' "$GRUB_CONFIG"
+    sed -i 's/^set timeout=.*/set timeout=0/' "$grub_config"
     
     # Make read-only to prevent regeneration
-    chmod 444 "$GRUB_CONFIG"
+    chmod 444 "$grub_config"
     
     log-success "GRUB menu hidden"
 }

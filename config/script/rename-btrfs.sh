@@ -14,6 +14,7 @@ source "$SCRIPT_DIR/../../lib/common.sh"
 # =============================================================================
 
 rename-btrfs-labels() {
+    ensure-root
     log-info "Renaming BTRFS labels"
     
     btrfs filesystem label /var fedora

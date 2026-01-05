@@ -22,6 +22,7 @@ readonly ICON_URL="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spo
 # =============================================================================
 
 setup-spotify-pwa() {
+    ensure-root
     log-info "Setting up Spotify PWA"
     
     # Create directories

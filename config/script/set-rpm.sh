@@ -149,7 +149,7 @@ install-packages() {
     log-info "Installing packages"
     
     if [[ ${#packages_ref[@]} -gt 0 ]]; then
-        rpm-ostree install --idempotent "${packages_ref[@]}"
+        rpm-ostree install --idempotent --allow-inactive "${packages_ref[@]}"
         log-success "Packages installed"
     fi
 }

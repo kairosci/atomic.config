@@ -22,6 +22,7 @@ readonly ICON_URL="https://cdn.simpleicons.org/protonmail/6D4AFF"
 # =============================================================================
 
 setup-protonmail-pwa() {
+    ensure-root
     log-info "Setting up ProtonMail PWA"
     
     # Create directories

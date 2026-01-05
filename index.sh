@@ -35,7 +35,8 @@ show-menu() {
     echo "  2. Update System"
     echo "  3. Delete Folder"
     echo "  4. Enable/Disable Folder Protection"
-    echo "  5. Exit"
+    echo "  5. Switch Distro (Kionite/Silverblue)"
+    echo "  6. Exit"
     echo ""
 }
 
@@ -73,6 +74,9 @@ main() {
                 "$SCRIPT_DIR/utils/toggle-folder-protection.sh"
                 ;;
             5)
+                "$SCRIPT_DIR/utils/switch-distro.sh"
+                ;;
+            6)
                 log-info "Goodbye!"
                 exit 0
                 ;;

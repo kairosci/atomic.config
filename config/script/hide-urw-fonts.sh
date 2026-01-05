@@ -34,7 +34,7 @@ hide-urw-fonts-system() {
     log-info "Hiding URW35 fonts (system level)"
     
     if [[ ! -f "$SYSTEM_CONF" ]]; then
-        echo "$FONTCONFIG_CONTENT" | sudo tee "$SYSTEM_CONF" > /dev/null
+        echo "$FONTCONFIG_CONTENT" | tee "$SYSTEM_CONF" > /dev/null
         log-success "System config created"
     else
         log-info "System config already exists"
@@ -72,6 +72,7 @@ refresh-font-cache() {
 # =============================================================================
 
 main() {
+    ensure-root
     hide-urw-fonts-system
     hide-urw-fonts-user
     refresh-font-cache
