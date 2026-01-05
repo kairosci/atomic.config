@@ -55,12 +55,14 @@ run-scripts() {
                 "./kionite/set-launcher-icon.sh"
                 "./kionite/set-konsole.sh"
                 "./kionite/set-ubuntu-look.sh"
+                "./kionite/optimize-animations.sh"
             )
             ;;
         silverblue)
             distro_scripts=(
                 "./silverblue/set-yaru.sh"
                 "./silverblue/set-extensions.sh"
+                "./silverblue/optimize-animations.sh"
             )
             ;;
         *)

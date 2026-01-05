@@ -222,7 +222,7 @@ tune-animations() {
     # Use "Scale" effect for window open/close for fluidity.
     
     # Set Animation Speed to "Normal" (implies smooth)
-    apply-kwrite "kdeglobals" "KDE" "AnimationDurationFactor" "1.0" # 1.0 is standard speed. 0.5 is fast.
+    apply-kwrite "kdeglobals" "KDE" "AnimationDurationFactor" "0.5" # 0.5 is fast (2x). Satisfies "Fast & Fluid".
     
     # Ensure Compositor is active and smooth
     apply-kwrite "kwinrc" "Compositing" "LatencyPolicy" "High" # "Smoother" preference

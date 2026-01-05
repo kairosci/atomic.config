@@ -83,7 +83,7 @@ configure-just-perfection() {
     dconf write /org/gnome/shell/extensions/just-perfection/workspace true
     
     # Animation speed (faster)
-    dconf write /org/gnome/shell/extensions/just-perfection/animation 2
+    dconf write /org/gnome/shell/extensions/just-perfection/animation 4
     
     log-success "Just Perfection configured"
 }
