@@ -54,6 +54,7 @@ run-scripts() {
                 "./kionite/disable-emojier.sh"
                 "./kionite/set-launcher-icon.sh"
                 "./kionite/set-konsole.sh"
+                "./kionite/set-ubuntu-look.sh"
             )
             ;;
         silverblue)

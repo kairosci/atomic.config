@@ -18,6 +18,10 @@ readonly SCRIPT_NAME="${0##*/}"
 
 # Detect which Fedora Atomic variant we're on
 detect-distro() {
+    if [[ -n "${FORCE_DISTRO:-}" ]]; then
+        return
+    fi
+
     if grep -qi "Kinoite" /etc/os-release 2>/dev/null; then
         echo "kionite"
     elif grep -qi "Silverblue" /etc/os-release 2>/dev/null; then

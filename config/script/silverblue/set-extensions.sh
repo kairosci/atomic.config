@@ -19,7 +19,7 @@ readonly -a GNOME_EXTENSIONS=(
     "dash-to-dock@micxgx.gmail.com"               # Ubuntu-style dock
     "blur-my-shell@aunetx"                        # Blur effects
     "just-perfection-desktop@just-perfection"    # Desktop tweaks
-    "caffeine@pataber.dev"                        # Prevent auto-suspend
+    "caffeine@patapon.info"                       # Prevent auto-suspend
 )
 
 # =============================================================================
@@ -88,27 +88,48 @@ configure-just-perfection() {
     log-success "Just Perfection configured"
 }
 
-print-extension-instructions() {
-    log-info ""
-    log-info "=========================================="
-    log-info "  GNOME Extensions Setup"
-    log-info "=========================================="
-    log-info ""
-    log-info "Extensions to install manually via Extension Manager:"
-    log-info ""
+install-cli-tools() {
+    log-info "Installing CLI tools for extension management..."
+    
+    # Ensure pip is installed (user scope)
+    if ! command -v pip &>/dev/null; then
+        log-info "Installing pip..."
+        python3 -m ensurepip --user --default-pip
+        
+        # Add local bin to PATH for this session
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+    
+    # Install gnome-extensions-cli
+    if ! command -v gnome-extensions-cli &>/dev/null; then
+        log-info "Installing gnome-extensions-cli..."
+        pip install --user gnome-extensions-cli
+        export PATH="$HOME/.local/bin:$PATH"
+    fi
+}
+
+install-extensions-cli() {
+    log-info "Installing GNOME extensions via CLI..."
+    
     for ext in "${GNOME_EXTENSIONS[@]}"; do
-        log-info "  • $ext"
+        log-info "Processing $ext..."
+        
+        # Install and enable
+        # Note: We use --upgrade to ensure we have the latest compatible version
+        gnome-extensions-cli install "$ext"
+        gnome-extensions-cli enable "$ext"
     done
-    log-info ""
-    log-info "Open Extension Manager and search for:"
-    log-info "  1. AppIndicator and KStatusNotifierItem Support"
-    log-info "  2. Dash to Dock"
-    log-info "  3. Blur my Shell"
-    log-info "  4. Just Perfection"
-    log-info "  5. Caffeine"
-    log-info ""
-    log-info "After installing, run this script again to apply configs."
-    log-info "=========================================="
+    
+    log-success "Extensions installed and enabled"
+}
+
+remove-extension-manager() {
+    log-info "Removing GNOME Extension Manager (cleanup)..."
+    if flatpak list --app | grep -q "com.mattjakeman.ExtensionManager"; then
+        flatpak uninstall flathub com.mattjakeman.ExtensionManager -y
+    else
+        log-info "Extension Manager not found, skipping removal."
+    fi
 }
 
 # =============================================================================
@@ -117,8 +138,12 @@ print-extension-instructions() {
 
 main() {
     ensure-user
+    # CLI setup
+    install-cli-tools
     
-    install-extension-manager
+    # Install extensions via CLI
+    install-extensions-cli
+    
     enable-user-extensions
     
     # Try to configure extensions if they're installed
@@ -130,7 +155,8 @@ main() {
         configure-just-perfection
     fi
     
-    print-extension-instructions
+    # Cleanup (remove flatpak as requested)
+    remove-extension-manager
 }
 
 main "$@"
