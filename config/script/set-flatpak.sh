@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set Flatpak Apps
 # Removes default apps and installs curated selection for Kionite/Silverblue
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants - Kionite (KDE)
-# =============================================================================
+
 
 readonly -a KIONITE_APPS_TO_REMOVE=(
     "org.kde.kmahjongg"
@@ -21,9 +21,9 @@ readonly -a KIONITE_APPS_TO_REMOVE=(
     "org.kde.skanpage"
 )
 
-# =============================================================================
+
 # Constants - Silverblue (GNOME)
-# =============================================================================
+
 
 readonly -a SILVERBLUE_APPS_TO_REMOVE=(
     "org.gnome.Contacts"
@@ -35,9 +35,9 @@ readonly -a SILVERBLUE_APPS_TO_REMOVE=(
     "org.gnome.Characters"
 )
 
-# =============================================================================
+
 # Constants - Common
-# =============================================================================
+
 
 readonly -a COMMON_APPS_TO_REMOVE=(
     "org.fedoraproject.Platform.GL.default"
@@ -47,9 +47,9 @@ readonly -a APPS_TO_INSTALL=(
     "com.discordapp.Discord"
 )
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 remove-defaults() {
     local distro="$1"
@@ -114,9 +114,9 @@ install-apps() {
     fi
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     ensure-root

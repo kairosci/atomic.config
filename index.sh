@@ -1,8 +1,8 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Fedora Atomic Manager
 # Interactive menu for system management (Kionite / Silverblue)
-# =============================================================================
+
 
 set -euo pipefail
 
@@ -17,32 +17,28 @@ readonly SCRIPT_DIR="$(cd "$(dirname "$TARGET_FILE")" && pwd)"
 # Source common library
 source "$SCRIPT_DIR/lib/common.sh"
 
-# =============================================================================
+
 # Menu Functions
-# =============================================================================
+
 
 show-menu() {
     local distro
     distro="$(detect-distro)"
     
     clear
-    echo "================================"
-    echo "    Fedora Atomic Manager"
-    echo "       [$distro]"
-    echo "================================"
-    echo ""
+    clear
+    echo "Fedora Atomic Manager [$distro]"
     echo "  1. Optimize System"
     echo "  2. Update System"
     echo "  3. Delete Folder"
     echo "  4. Enable/Disable Folder Protection"
     echo "  5. Switch Distro (Kionite/Silverblue)"
     echo "  6. Exit"
-    echo ""
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     # require-root (now handled per-script)
@@ -77,7 +73,6 @@ main() {
                 "$SCRIPT_DIR/utils/switch-distro.sh"
                 ;;
             6)
-                log-info "Goodbye!"
                 exit 0
                 ;;
             *)
@@ -85,7 +80,6 @@ main() {
                 ;;
         esac
         
-        echo ""
         read -rp "Press Enter to continue..."
     done
 }

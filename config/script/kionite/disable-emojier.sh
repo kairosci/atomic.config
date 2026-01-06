@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Disable Plasma Emojier
 # Hides the KDE emoji selector via local desktop override
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../lib/common.sh"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 disable-plasma-emojier() {
     log-info "Disabling plasma-emojier"
@@ -39,9 +39,9 @@ EOF
     fi
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     disable-plasma-emojier

@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Hide URW35 Fonts
 # Hides URW fonts from applications via fontconfig
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants
-# =============================================================================
+
 
 readonly FONTCONFIG_CONTENT='<?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
@@ -26,9 +26,9 @@ readonly FONTCONFIG_CONTENT='<?xml version="1.0"?>
 
 readonly SYSTEM_CONF="/etc/fonts/conf.d/99-hide-urw-fonts.conf"
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 hide-urw-fonts-system() {
     log-info "Hiding URW35 fonts (system level)"
@@ -67,9 +67,9 @@ refresh-font-cache() {
     log-success "Font cache refreshed"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     ensure-root

@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Rename BTRFS Labels
 # Renames filesystem labels for /var and /var/home
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 rename-btrfs-labels() {
     ensure-root
@@ -23,9 +23,9 @@ rename-btrfs-labels() {
     log-success "BTRFS labels renamed"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     rename-btrfs-labels

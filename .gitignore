@@ -1,1 +1,8 @@
 .state_protected
+
+# Antigravity Data & Cache
+data/Antigravity/Cache/
+data/Antigravity/Code Cache/
+data/Antigravity/GPUCache/
+data/Antigravity/logs/
+data/Antigravity/User/History/

@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Manage System
 # System cleanup, config removal, upgrade, and Flatpak maintenance
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants - Kionite (KDE)
-# =============================================================================
+
 
 readonly -a KIONITE_CONFIG_DIRS=(
     ".config/kdeconnect"
@@ -53,9 +53,9 @@ readonly -a KIONITE_SHARE_DIRS=(
     ".local/share/knewstuff3"
 )
 
-# =============================================================================
+
 # Constants - Silverblue (GNOME)
-# =============================================================================
+
 
 readonly -a SILVERBLUE_CONFIG_DIRS=(
     ".config/gnome-software"
@@ -79,9 +79,9 @@ readonly -a SILVERBLUE_SHARE_DIRS=(
     ".local/share/yelp"
 )
 
-# =============================================================================
+
 # Constants - Common (both distros)
-# =============================================================================
+
 
 readonly -a COMMON_CONFIG_DIRS=(
     ".mozilla"
@@ -99,9 +99,9 @@ readonly -a COMMON_SHARE_DIRS=(
     ".local/share/waydroid"
 )
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 system-cleanup() {
     log-info "System cleanup"
@@ -164,9 +164,9 @@ flatpak-maintenance() {
     log-success "Flatpak maintenance done"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     ensure-root

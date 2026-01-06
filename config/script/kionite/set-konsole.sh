@@ -1,24 +1,24 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set Konsole Profile
 # Creates a custom Konsole profile with Adwaita Mono font
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../lib/common.sh"
 
-# =============================================================================
+
 # Constants
-# =============================================================================
+
 
 readonly PROFILE_NAME="Kionite"
 readonly FONT_CONFIG="Adwaita Mono,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 setup-konsole() {
     log-info "Creating Konsole profile '$PROFILE_NAME'"
@@ -46,9 +46,9 @@ EOF
     log-success "Konsole profile '$PROFILE_NAME' created"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     require-root

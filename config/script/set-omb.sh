@@ -1,24 +1,24 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set Oh My Bash
 # Installs and configures Oh My Bash with vscode theme
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants
-# =============================================================================
+
 
 readonly OMB_THEME="vscode"
 readonly OMB_INSTALL_URL="https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 setup-omb() {
     log-info "Configuring Oh My Bash"
@@ -62,9 +62,9 @@ setup-omb() {
     fi
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     require-root

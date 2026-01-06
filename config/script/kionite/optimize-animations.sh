@@ -1,7 +1,7 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Optimize Animations (Kionite)
-# =============================================================================
+
 
 set -euo pipefail
 
@@ -11,7 +11,9 @@ source "$SCRIPT_DIR/../../../lib/common.sh"
 optimize-animations() {
     log-info "Optimizing KWin Animations..."
 
-    # AnimationDurationFactor: 0.5 = Fast (2x speed)
+    # KWin Animation Speed
+    # Duration Factor: 0.5 (Fast / 2x speed)
+    # Rationale: Reduces window management delays without disabling animations.
     local speed="0.5"
 
     log-info "Setting Animation Duration Factor to $speed"
@@ -23,8 +25,17 @@ optimize-animations() {
 
     "$config_tool" --file kdeglobals --group KDE --key AnimationDurationFactor "$speed"
     
-    # "High" (ForceSmooth) ensures vsync and less tearing
+    # Latency Policy
+    # Value: "High" (ForceSmooth)
+    # Rationale: Prioritizes smoothness and VSync to prevent tearing.
     "$config_tool" --file kwinrc --group Compositing --key LatencyPolicy "High"
+
+    # Magic Lamp Effect
+    # Description: Minimization animation similar to macOS/Ubuntu Genie effect.
+    # Rationale: Provides a more distinct and polished visual feedback.
+    log-info "Enabling Magic Lamp Effect..."
+    "$config_tool" --file kwinrc --group Plugins --key kwin4_effect_magiclampEnabled "true"
+    "$config_tool" --file kwinrc --group Plugins --key magiclampEnabled "true"
 
     log-success "Animation settings applied."
     

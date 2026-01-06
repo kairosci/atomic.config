@@ -1,8 +1,6 @@
 #!/usr/bin/bash
-# =============================================================================
 # Fedora Atomic Configuration Index
 # Main entry point for system configuration (Kionite / Silverblue)
-# =============================================================================
 
 set -euo pipefail
 
@@ -12,9 +10,7 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Source common library
 source "$SCRIPT_DIR/../lib/common.sh"
 
-# =============================================================================
 # Main Functions
-# =============================================================================
 
 run-scripts() {
     local distro
@@ -43,6 +39,11 @@ run-scripts() {
         "./manage-system.sh"
         "./set-safe-delete.sh"
         "./set-omb.sh"
+        "./set-theme.sh"
+        "./set-wallpaper.sh"
+        "./set-adwaita-fonts.sh"
+        "./set-font-whitelist.sh"
+        "./set-apple-emojis.sh"
     )
     
     # Distro-specific scripts
@@ -54,13 +55,11 @@ run-scripts() {
                 "./kionite/disable-emojier.sh"
                 "./kionite/set-launcher-icon.sh"
                 "./kionite/set-konsole.sh"
-                "./kionite/set-ubuntu-look.sh"
                 "./kionite/optimize-animations.sh"
             )
             ;;
         silverblue)
             distro_scripts=(
-                "./silverblue/set-yaru.sh"
                 "./silverblue/set-extensions.sh"
                 "./silverblue/optimize-animations.sh"
             )
@@ -97,9 +96,7 @@ run-scripts() {
     log-success "Configuration completed for $distro"
 }
 
-# =============================================================================
 # Entry Point
-# =============================================================================
 
 main() {
     # require-root (now handled per-script)

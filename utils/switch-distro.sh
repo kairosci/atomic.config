@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Switch Distro
 # Switches between Fedora Silverblue and Kionite (and vice versa)
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 get-os-version() {
     rpm -E %fedora
@@ -48,15 +48,12 @@ switch-distro() {
             ;;
     esac
     
-    echo ""
     log-info "Target configuration:"
     log-info "  Distro:  $target_distro"
     log-info "  Ref:     $target_ref"
-    echo ""
     log-warn "WARNING: This operation will rebase your system to $target_distro."
     log-warn "This requires a large download and a system reboot."
     log-warn "Any layered packages incompatible with the new desktop environment might cause issues."
-    echo ""
     
     read -rp "Are you sure you want to proceed? (y/N) " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
@@ -71,9 +68,9 @@ switch-distro() {
     log-info "Please reboot your system to boot into $target_distro."
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     switch-distro

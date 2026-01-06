@@ -1,25 +1,25 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set ProtonMail PWA
 # Creates a desktop entry for ProtonMail as a Progressive Web App via Brave
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants
-# =============================================================================
+
 
 readonly APPS_DIR="/usr/local/share/applications"
 readonly ICONS_DIR="/usr/local/share/icons/hicolor/scalable/apps"
 readonly ICON_URL="https://cdn.simpleicons.org/protonmail/6D4AFF"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 setup-protonmail-pwa() {
     ensure-root
@@ -47,9 +47,9 @@ EOF
     log-success "ProtonMail PWA configured"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     setup-protonmail-pwa

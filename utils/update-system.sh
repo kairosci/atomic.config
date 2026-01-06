@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Update System
 # Performs system update, Flatpak update, and cleanup
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 update-system() {
     log-info "Updating system (rpm-ostree)"
@@ -43,9 +43,9 @@ cleanup() {
     log-success "Cleanup completed"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     require-root
@@ -53,7 +53,6 @@ main() {
     update-flatpak
     cleanup
     
-    echo ""
     log-success "Update and cleanup completed!"
     log-info "You may need to reboot to apply rpm-ostree changes."
 }

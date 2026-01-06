@@ -1,7 +1,7 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Clean Orphan Directories
-# =============================================================================
+
 
 set -e
 
@@ -89,9 +89,7 @@ scan-directory() {
 main() {
     ensure-user
     
-    echo "==================================================="
     echo " CLEAN ORPHANED CONFIGURATIONS"
-    echo "==================================================="
     
     scan-directory "$HOME/.config" "User Config"
     scan-directory "$HOME/.local/share" "Local Data"

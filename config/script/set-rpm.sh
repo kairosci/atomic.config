@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set RPM Packages
 # Manages rpm-ostree packages for Kionite and Silverblue
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants - Kionite (KDE Plasma)
-# =============================================================================
+
 
 readonly -a KIONITE_PACKAGES_TO_REMOVE=(
     "ibus-typing-booster"
@@ -52,12 +52,14 @@ readonly -a KIONITE_PACKAGES_TO_INSTALL=(
     "rsms-inter-fonts"
     "google-noto-emoji-fonts"
     "breeze-gtk"
-    "adw-gtk3-theme"
+    "unzip"
+    "arc-theme"
+    "papirus-icon-theme"
 )
 
-# =============================================================================
+
 # Constants - Silverblue (GNOME)
-# =============================================================================
+
 
 readonly -a SILVERBLUE_PACKAGES_TO_REMOVE=(
     "gnome-software"
@@ -79,6 +81,7 @@ readonly -a SILVERBLUE_PACKAGES_TO_REMOVE=(
     "firefox"
     "firefox-langpacks"
     "toolbox"
+    "fedora-workstation-backgrounds"
 )
 
 readonly -a SILVERBLUE_PACKAGES_TO_INSTALL=(
@@ -89,16 +92,14 @@ readonly -a SILVERBLUE_PACKAGES_TO_INSTALL=(
     "distrobox"
     "rsms-inter-fonts"
     "google-noto-emoji-fonts"
-    "yaru-theme"
-    "yaru-gtk3-theme"
-    "yaru-gtk4-theme"
-    "yaru-icon-theme"
-    "yaru-sound-theme"
+    "unzip"
+    "arc-theme"
+    "papirus-icon-theme"
 )
 
-# =============================================================================
+
 # Functions
-# =============================================================================
+
 
 remove-base-packages() {
     local distro="$1"
@@ -141,6 +142,8 @@ install-third-party-repos() {
     else
         log-info "Brave repository already exists"
     fi
+
+
 }
 
 install-packages() {
@@ -174,9 +177,65 @@ EOF
     log-success "Antigravity installed"
 }
 
-# =============================================================================
+
+# Function: configure-antigravity
+# Description:
+#   Configures Antigravity by checking for a user-supplied config file 
+#   in the repository and installing it to ~/.config/antigravity.
+#   Since we cannot read ~/.config directly during setup, this relies on a
+#   backup strategy.
+
+configure-antigravity() {
+    log-info "Configuring Antigravity..."
+    
+    local real_user
+    real_user="$(get-real-user)"
+    local user_home
+    user_home="$(get-user-home)"
+    
+    # Check if a backup config exists in the repo
+    # Use data/Antigravity for full directory restore
+    local repo_config_dir="$SCRIPT_DIR/../../../data/Antigravity"
+    local target_dir="$user_home/.config/Antigravity"
+    
+    if [[ -d "$repo_config_dir" ]]; then
+        log-info "Found Antigravity backup configuration in 'data/'. Restoring..."
+        
+        # Ensure parent dir exists
+        mkdir -p "$(dirname "$target_dir")"
+        
+        # Restore directory matches (Merge/Overwrite configs, preserve local Cache/History)
+        # using -u (update) to likely overwrite if source is newer, or just -f to force.
+        # usually just copying the structure over is enough.
+        cp -rf "$repo_config_dir/"* "$target_dir/"
+        fix-ownership "$target_dir"
+        
+        # Install extensions if list exists
+        local ext_list="$repo_config_dir/extensions.list"
+        if [[ -f "$ext_list" ]] && command -v antigravity &>/dev/null; then
+            log-info "Installing Antigravity extensions from backup list..."
+            while IFS= read -r ext; do
+                [[ -z "$ext" ]] && continue
+                log-info "Installing extension: $ext"
+                # Run as real user to ensure extensions go to user profile
+                # Check if already installed to save time? antigravity might handle it.
+                if ! sudo -u "$real_user" antigravity --install-extension "$ext" &>/dev/null; then
+                    log-warn "Failed to install $ext (or already installed)"
+                fi
+            done < "$ext_list"
+            log-success "Extensions installation process completed."
+        fi
+        
+        log-success "Antigravity configuration updated from data backup (Cache preserved)."
+    else
+        log-warn "No Antigravity backup config found at $repo_config_dir."
+        log-info "To persist your config, run ./config/script/import-antigravity-config.sh"
+    fi
+}
+
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     ensure-root
@@ -204,6 +263,7 @@ main() {
     esac
     
     install-google-antigravity
+    configure-antigravity
 }
 
 main "$@"

@@ -1,25 +1,25 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Set Spotify PWA
 # Creates a desktop entry for Spotify as a Progressive Web App via Brave
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../lib/common.sh"
 
-# =============================================================================
+
 # Constants
-# =============================================================================
+
 
 readonly APPS_DIR="/usr/local/share/applications"
 readonly ICONS_DIR="/usr/local/share/icons/hicolor/512x512/apps"
 readonly ICON_URL="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/512px-Spotify_logo_without_text.svg.png"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 setup-spotify-pwa() {
     ensure-root
@@ -47,9 +47,9 @@ EOF
     log-success "Spotify PWA configured"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     setup-spotify-pwa

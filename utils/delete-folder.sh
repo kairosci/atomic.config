@@ -1,17 +1,17 @@
 #!/usr/bin/bash
-# =============================================================================
+
 # Delete Folder
 # Interactively deletes folders matching a pattern
-# =============================================================================
+
 
 set -euo pipefail
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/common.sh"
 
-# =============================================================================
+
 # Main Function
-# =============================================================================
+
 
 delete-folders() {
     read -rp "Folder name pattern: " folder_name
@@ -35,9 +35,9 @@ delete-folders() {
     log-success "Done"
 }
 
-# =============================================================================
+
 # Entry Point
-# =============================================================================
+
 
 main() {
     delete-folders
